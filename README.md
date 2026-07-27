@@ -4,7 +4,7 @@
 
 # Reactive
 
-[![MIT License](https://img.shields.io/github/license/rizer001/Reactive?&logo=github)](LICENSE)
+[![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?&logo=github)](LICENSE)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/rizer001/Reactive/build.yml?branch=main&event=push&logo=github)](https://github.com/rizer001/Reactive/actions)
 [![GitHub release](https://img.shields.io/github/v/release/rizer001/Reactive?include_prereleases&logo=github)](https://github.com/rizer001/Reactive/releases)
 [![Discord](https://img.shields.io/discord/685683385313919172?logo=discord&label=Discord)](https://purpurmc.org/discord)
@@ -79,6 +79,11 @@ On first startup, Reactive automatically creates the `config/` directory and gen
 **Important:** The `config/` folder is the **single source of truth** for configuration files. If a file is missing at startup, it will be created automatically.
 
 **`reactive-config.yml`** is the central config file for all Reactive-specific features.
+
+> 💡 **Note:** Advanced features like player authentication, permissions, anti-cheat, custom screens (Dialogs),
+> and server management commands are implemented in the companion plugin
+> **[UltimateImprovments](https://github.com/rizer001/UltimateImprovments)** (aka UI / `/ui`),
+> not in Reactive core. Reactive focuses on server performance and world configuration.
 
 ### 🔒 EULA Auto-Accept
 
@@ -199,9 +204,9 @@ The API includes all interfaces from Paper, Spigot, and Bukkit.
 
 ## 📜 License
 
-All Reactive patches are distributed under the **MIT** license unless otherwise noted in the patch headers.
+This project is licensed under the **GNU Affero General Public License v3.0** (AGPLv3).
 
-[![MIT License](https://img.shields.io/github/license/rizer001/Reactive?&logo=github)](LICENSE)
+[![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?&logo=github)](LICENSE)
 
 See [PaperMC/Paper](https://github.com/PaperMC/Paper) and [PurpurMC/Purpur](https://github.com/PurpurMC/Purpur) for the license of material used by this project.
 
