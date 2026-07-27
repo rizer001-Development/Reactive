@@ -58,12 +58,12 @@ fun optionalInclude(name: String, op: (ProjectDescriptor.() -> Unit)? = null) {
 
 gradle.lifecycle.beforeProject {
     val mcVersion = providers.gradleProperty("mcVersion").get().trim()
-    val purpurChannel = providers.gradleProperty("channel").get().trim()
-    val purpurBuildNumber = providers.environmentVariable("BUILD_NUMBER").orNull?.trim()?.toInt()
-    val versionString = if (purpurBuildNumber == null) {
+    val reactiveChannel = providers.gradleProperty("channel").get().trim()
+    val reactiveBuildNumber = providers.environmentVariable("BUILD_NUMBER").orNull?.trim()?.toInt()
+    val versionString = if (reactiveBuildNumber == null) {
         "$mcVersion.local-SNAPSHOT"
     } else {
-        "$mcVersion.build.$purpurBuildNumber-${purpurChannel.lowercase()}"
+        "$mcVersion.build.$reactiveBuildNumber-${reactiveChannel.lowercase()}"
     }
     version = versionString
 }

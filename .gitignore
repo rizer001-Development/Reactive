@@ -60,3 +60,11 @@ manifest.mf
 /paper-api
 *.jar
 test-plugin.settings.gradle.kts
+
+# Reactive - Generated Minecraft source (embedded git repos)
+reactive-server/src/minecraft/java
+reactive-server/src/minecraft/resources
+paper-server
+paper-api
+# Build outputs
+reactive-server/build

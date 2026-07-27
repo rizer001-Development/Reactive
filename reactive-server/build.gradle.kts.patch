@@ -14,22 +14,22 @@
      gitFilePatches = false
  
 -    updatingMinecraft {
-+    // Purpur start - Rebrand
-+    val purpur = forks.register("purpur") {
++    // Reactive start - Rebrand
++    val reactive = forks.register("reactive") {
 +        upstream.patchDir("paperServer") {
 +            upstreamPath = "paper-server"
 +            excludes = setOf("src/minecraft", "patches", "build.gradle.kts")
-+            patchesDir = rootDirectory.dir("purpur-server/paper-patches")
++            patchesDir = rootDirectory.dir("reactive-server/paper-patches")
 +            outputDir = rootDirectory.dir("paper-server")
 +        }
 +    }
-+    activeFork = purpur
-+    // Purpur end - Rebrand
++    activeFork = reactive
++    // Reactive end - Rebrand
 +
-+    /*updatingMinecraft { // Purpur start - TODO - snapshot - we don't need this
++    /*updatingMinecraft { // Reactive start - TODO - snapshot - we don't need this
          // oldPaperCommit = "d4fe85375af18bfa88f44d7c1e6a61904ae550cc"
 -    }
-+    }*/ // Purpur end - TODO - snapshot - we don't need this
++    }*/ // Reactive end - TODO - snapshot - we don't need this
  }
  
  tasks.generateDevelopmentBundle {
@@ -38,7 +38,7 @@
  }
  
 -val log4jPlugins = sourceSets.create("log4jPlugins")
-+// Purpur start - Rebrand
++// Reactive start - Rebrand
 +sourceSets {
 +    main {
 +        java { srcDir("../paper-server/src/main/java") }
@@ -52,7 +52,7 @@
 +val log4jPlugins = sourceSets.create("log4jPlugins") {
 +    java { srcDir("../paper-server/src/log4jPlugins/java") }
 +}
-+// Purpur end - Rebrand
++// Reactive end - Rebrand
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
@@ -61,7 +61,7 @@
  
  dependencies {
 -    implementation(project(":paper-api"))
-+    implementation(project(":purpur-api")) // Purpur
++    implementation(project(":reactive-api")) // Reactive
      implementation("ca.spottedleaf:leafpile:1.0.0")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
@@ -69,9 +69,9 @@
      implementation("org.ow2.asm:asm-commons:9.9.1")
      implementation("org.spongepowered:configurate-yaml:4.2.0")
  
-+    implementation("org.mozilla:rhino-runtime:1.7.14") // Purpur
-+    implementation("org.mozilla:rhino-engine:1.7.14") // Purpur
-+    implementation("dev.omega24:upnp4j:1.0") // Purpur
++    implementation("org.mozilla:rhino-runtime:1.7.14") // Reactive
++    implementation("org.mozilla:rhino-engine:1.7.14") // Reactive
++    implementation("dev.omega24:upnp4j:1.0") // Reactive
 +
      // Deps that were previously in the API but have now been moved here for backwards compat, eventually to be removed
      runtimeOnly("commons-lang:commons-lang:2.6")
@@ -81,7 +81,7 @@
          val mcVersion = rootProject.providers.gradleProperty("mcVersion").get()
          val build = System.getenv("BUILD_NUMBER") ?: null
 -        val buildTime = providers.environmentVariable("BUILD_STARTED_AT").map(Instant::parse).orElse(Instant.EPOCH).get()
-+        val buildTime = if (build != null) Instant.now() else Instant.EPOCH // Purpur
++        val buildTime = if (build != null) Instant.now() else Instant.EPOCH // Reactive
          val gitHash = git.exec(providers, "rev-parse", "--short=7", "HEAD").get().trim()
          val implementationVersion = "$mcVersion-${build ?: "DEV"}-$gitHash"
          val date = git.exec(providers, "show", "-s", "--format=%ci", gitHash).get().trim()
@@ -89,18 +89,18 @@
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
 -            "Implementation-Title" to "Paper",
-+            "Implementation-Title" to "Reactive", // Purpur
++            "Implementation-Title" to "Reactive", // Reactive
              "Implementation-Version" to implementationVersion,
              "Implementation-Vendor" to date,
 -            "Specification-Title" to "Paper",
-+            "Specification-Title" to "Reactive", // Purpur
++            "Specification-Title" to "Reactive", // Reactive
              "Specification-Version" to project.version,
 -            "Specification-Vendor" to "Paper Team",
 -            "Brand-Id" to "papermc:paper",
 -            "Brand-Name" to "Paper",
-+            "Specification-Vendor" to "rizer001", // Purpur
-+            "Brand-Id" to "rizer001:reactive", // Purpur
-+            "Brand-Name" to "Reactive", // Purpur
++            "Specification-Vendor" to "rizer001", // Reactive
++            "Brand-Id" to "rizer001:reactive", // Reactive
++            "Brand-Name" to "Reactive", // Reactive
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
@@ -109,7 +109,7 @@
  }
  
 -val generatedDir: java.nio.file.Path = layout.projectDirectory.dir("src/generated/java").asFile.toPath()
-+val generatedDir: java.nio.file.Path = layout.projectDirectory.dir("../paper-server/src/generated/java").asFile.toPath() // Purpur
++val generatedDir: java.nio.file.Path = layout.projectDirectory.dir("../paper-server/src/generated/java").asFile.toPath() // Reactive
  idea {
      module {
          generatedSourceDirs.add(generatedDir.toFile())
@@ -118,7 +118,7 @@
  }
  
 -fill {
-+/* fill { // Purpur - we don't use fill
++/* fill { // Reactive - we don't use fill
      project("paper")
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
      version(paperweight.minecraftVersion)
@@ -127,15 +127,15 @@
          }
      }
 -}
-+} */ // Purpur - we don't use fill
++} */ // Reactive - we don't use fill
 +
 +// tasks.register("rebuildMinecraftSourcesWithGit") {
 +//     group = "temp"
 +//
-+//     val patchDir = project.rootDir.resolve("purpur-server/minecraft-patches/sources").convertToPath().cleanDir()
-+//     val inputDir = this.project.rootDir.resolve("purpur-server/src/minecraft/java").convertToPath()
++//     val patchDir = project.rootDir.resolve("reactive-server/minecraft-patches/sources").convertToPath().cleanDir()
++//     val inputDir = this.project.rootDir.resolve("reactive-server/src/minecraft/java").convertToPath()
 +//
-+//     //val patchDir = project.rootDir.resolve("purpur-server/paper-patches/files").convertToPath().cleanDir()
++//     //val patchDir = project.rootDir.resolve("reactive-server/paper-patches/files").convertToPath().cleanDir()
 +//     //val inputDir = this.project.rootDir.resolve("paper-server").convertToPath()
 +//
 +//     val git = Git(inputDir)
@@ -171,3 +171,24 @@
 +//
 +//     return files.size
 +// }
++
++// Reactive start - Add copyReactiveJar task
++val reactiveServerJar = tasks.register("copyReactiveJar") {
++    dependsOn("createPaperclipJar")
++    doLast {
++        copy {
++            from(layout.buildDirectory.file("libs/reactive-paperclip-*.jar"))
++            into(layout.buildDirectory.file("libs"))
++            include("*.jar")
++            rename { "reactive-server.jar" }
++        }
++        copy {
++            from(layout.buildDirectory.file("libs/purpur-paperclip-*.jar"))
++            into(layout.buildDirectory.file("libs"))
++            include("*.jar")
++            rename { "reactive-server.jar" }
++        }
++        println("Reactive server JAR created: reactive-server.jar")
++    }
++}
++// Reactive end - Add copyReactiveJar task

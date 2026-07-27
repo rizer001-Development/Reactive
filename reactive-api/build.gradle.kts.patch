@@ -32,7 +32,7 @@
  val services = objects.newInstance<Services>()
  
  tasks.withType<Javadoc>().configureEach {
-+    (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:none", "-quiet") // Purpur - silence Paper's bajillion javadoc warnings
++    (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:none", "-quiet") // Reactive - silence Paper's bajillion javadoc warnings
      val options = options as StandardJavadocDocletOptions
 -    options.overview = "src/main/javadoc/overview.html"
 +    options.overview = "../paper-api/src/main/javadoc/overview.html"
