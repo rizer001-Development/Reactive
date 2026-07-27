@@ -80,6 +80,15 @@ On first startup, Reactive automatically creates the `config/` directory and gen
 
 **`reactive-config.yml`** is the central config file for all Reactive-specific features.
 
+### 🧩 Companion Plugin — UltimateImprovments
+
+[**UltimateImprovments**](https://github.com/rizer001/UltimateImprovments) (UI) is an addon plugin designed specifically for Reactive.
+It provides authentication (Custom Screen dialogs), anti-cheat, player management commands,
+and other server-side features that complement the core server.
+
+Adds the `/ui` command for server management. See the project's
+[README](https://github.com/rizer001/UltimateImprovments) for full documentation.
+
 ### 🔒 EULA Auto-Accept
 
 Reactive automatically accepts the EULA on your behalf on first launch. This is recorded in the database and does not require manually editing `eula.txt`.
