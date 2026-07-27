@@ -14,18 +14,18 @@ paperweight {
 
         patchFile {
             path = "paper-server/build.gradle.kts"
-            outputFile = file("purpur-server/build.gradle.kts")
-            patchFile = file("purpur-server/build.gradle.kts.patch")
+            outputFile = file("reactive-server/build.gradle.kts")
+            patchFile = file("reactive-server/build.gradle.kts.patch")
         }
         patchFile {
             path = "paper-api/build.gradle.kts"
-            outputFile = file("purpur-api/build.gradle.kts")
-            patchFile = file("purpur-api/build.gradle.kts.patch")
+            outputFile = file("reactive-api/build.gradle.kts")
+            patchFile = file("reactive-api/build.gradle.kts.patch")
         }
         patchDir("paperApi") {
             upstreamPath = "paper-api"
             excludes = setOf("build.gradle.kts")
-            patchesDir = file("purpur-api/paper-patches")
+            patchesDir = file("reactive-api/paper-patches")
             outputDir = file("paper-api")
         }
     }
@@ -68,8 +68,8 @@ subprojects {
 
     extensions.configure<PublishingExtension> {
         repositories {
-            maven("https://repo.purpurmc.org/snapshots") {
-                name = "purpur"
+            maven("https://github.com/rizer001/Reactive") {
+                name = "reactive"
                 credentials(PasswordCredentials::class)
             }
         }
@@ -82,7 +82,7 @@ tasks.register("printMinecraftVersion") {
     }
 }
 
-tasks.register("printPurpurVersion") {
+tasks.register("printReactiveVersion") {
     doLast {
         println(project.version)
     }
