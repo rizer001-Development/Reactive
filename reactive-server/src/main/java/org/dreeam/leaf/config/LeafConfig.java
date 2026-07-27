@@ -28,6 +28,20 @@ public class LeafConfig {
                 LOGGER.info("Reactive: Created config/ directory for server configuration files.");
             }
 
+            // Create default eula.txt in config/ if not exists (auto-accept)
+            File eulaFile = CONFIG_DIR.resolve("eula.txt").toFile();
+            if (!eulaFile.exists()) {
+                try {
+                    String eulaContent = "#By changing the setting below to TRUE, you are indicating your agreement to our EULA\n"
+                        + "#https://aka.ms/MinecraftEULA\n"
+                        + "eula=true\n";
+                    Files.writeString(eulaFile.toPath(), eulaContent);
+                    LOGGER.info("Reactive: Created eula.txt in config/ directory (auto-accepted).");
+                } catch (IOException e) {
+                    LOGGER.warn("Reactive: Could not create eula.txt", e);
+                }
+            }
+
             // Create default server.properties in config/ if not exists
             File serverProps = CONFIG_DIR.resolve("server.properties").toFile();
             if (!serverProps.exists()) {
