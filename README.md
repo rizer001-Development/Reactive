@@ -80,11 +80,6 @@ On first startup, Reactive automatically creates the `config/` directory and gen
 
 **`reactive-config.yml`** is the central config file for all Reactive-specific features.
 
-> 💡 **Note:** Advanced features like player authentication, permissions, anti-cheat, custom screens (Dialogs),
-> and server management commands are implemented in the companion plugin
-> **[UltimateImprovments](https://github.com/rizer001/UltimateImprovments)** (aka UI / `/ui`),
-> not in Reactive core. Reactive focuses on server performance and world configuration.
-
 ### 🔒 EULA Auto-Accept
 
 Reactive automatically accepts the EULA on your behalf on first launch. This is recorded in the database and does not require manually editing `eula.txt`.
