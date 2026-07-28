@@ -231,3 +231,19 @@ See [PaperMC/Paper](https://github.com/PaperMC/Paper) and [PurpurMC/Purpur](http
 **[GitHub](https://github.com/rizer001/Reactive)** · **[Releases](https://github.com/rizer001/Reactive/releases)** · **[Issues](https://github.com/rizer001/Reactive/issues)**
 
 </div>
+
+---
+
+## 🚧 Development Status
+
+**Reactive is currently in active development.** New features, improvements, and bug fixes are being added regularly.
+
+Planned additions include:
+- ✅ Extended world height (up to 2048 blocks)
+- ✅ X/Z extension to 67 million blocks
+- 🔄 **More performance optimizations** — further improvements to chunk and entity processing
+- 🔄 **Enhanced configuration options** — even more fine-grained control over server behavior
+- 🔄 **Deeper UltimateImprovments integration** — seamless compatibility with the companion plugin
+- 🔄 **New APIs** — additional hooks for plugin developers
+
+Stay tuned for updates! Follow the [Releases page](https://github.com/rizer001/Reactive/releases) to be notified of new builds.

@@ -62,6 +62,7 @@
 +
 +        org.purpurmc.purpur.task.BossBarTask.startAll(); // Purpur - Implement TPSBar
 +        if (org.purpurmc.purpur.PurpurConfig.beeCountPayload) org.purpurmc.purpur.task.BeehiveTask.instance().register(); // Purpur - Give bee counts in beehives to Purpur clients
++        org.purpurmc.reactive.task.MSPTAlertTask.startTask(); // Reactive - MSPT overload alerts
  
          this.saveEverything(false, true, true);
          this.notificationManager().serverStarted();
