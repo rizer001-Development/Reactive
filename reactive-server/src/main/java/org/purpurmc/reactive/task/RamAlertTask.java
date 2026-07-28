@@ -8,6 +8,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.purpurmc.purpur.util.MinecraftInternalPlugin;
 import org.purpurmc.reactive.config.ReactiveConfig;
 
+import java.util.Locale;
+
 /**
  * RamAlertTask — monitors server JVM memory usage and sends
  * warnings to players with the configured permission.
@@ -54,22 +56,22 @@ public class RamAlertTask extends BukkitRunnable {
         final double usagePct = (double) usedMemory / (double) maxMemory * 100.0D;
 
         final long now = System.currentTimeMillis();
-        final long cooldownMs = ReactiveConfig.ramAlertCooldownSeconds * 1000L;
+        // Enforce minimum 1-second cooldown
+        final long cooldownMs = Math.max(1000L, ReactiveConfig.ramAlertCooldownSeconds * 1000L);
 
         // Respect cooldown
         if (now - lastWarningTime < cooldownMs) return;
 
+        // Format GB values once (avoids duplication in both branches)
+        final String usedGb = String.format(Locale.US, "%.1f", usedMemory / (1024.0D * 1024.0D * 1024.0D));
+        final String maxGb = String.format(Locale.US, "%.1f", maxMemory / (1024.0D * 1024.0D * 1024.0D));
+        final String pct = String.format(Locale.US, "%.0f", usagePct);
+
         final String message;
         if (usagePct > ReactiveConfig.ramAlertCriticalThreshold) {
-            String usedGb = String.format("%.1f", usedMemory / (1024.0D * 1024.0D * 1024.0D));
-            String maxGb = String.format("%.1f", maxMemory / (1024.0D * 1024.0D * 1024.0D));
-            String pct = String.format("%.0f", usagePct);
             message = "<red>⚠ Critical RAM usage!</red> <gray>"
                 + usedGb + "GB / " + maxGb + "GB (</gray><yellow>" + pct + "%</yellow><gray>)</gray>";
         } else if (usagePct > ReactiveConfig.ramAlertWarningThreshold) {
-            String usedGb = String.format("%.1f", usedMemory / (1024.0D * 1024.0D * 1024.0D));
-            String maxGb = String.format("%.1f", maxMemory / (1024.0D * 1024.0D * 1024.0D));
-            String pct = String.format("%.0f", usagePct);
             message = "<gold>⚡ High RAM usage!</gold> <gray>"
                 + usedGb + "GB / " + maxGb + "GB (</gray><yellow>" + pct + "%</yellow><gray>)</gray>";
         } else {
@@ -91,6 +93,8 @@ public class RamAlertTask extends BukkitRunnable {
      * Starts the task, running at the configured interval.
      */
     public void start() {
+        // Guard: prevent IllegalStateException if already scheduled
+        if (getTaskId() != -1) return;
         long interval = Math.max(1, ReactiveConfig.ramAlertIntervalTicks);
         this.runTaskTimer(new MinecraftInternalPlugin(), interval, interval);
     }

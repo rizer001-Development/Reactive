@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://user-images.githubusercontent.com/74448585/150906023-101cd383-da82-4a3c-9603-a3b5741c3994.png" alt="Reactive" width="200">
+<img src="images/reactive.png" alt="Reactive" width="200">
 
 # Reactive
 
