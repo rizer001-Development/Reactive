@@ -48,6 +48,7 @@
 +        org.purpurmc.purpur.task.BossBarTask.stopAll(); // Purpur - Implement TPSBar
 +        org.purpurmc.purpur.task.BeehiveTask.instance().unregister(); // Purpur - Give bee counts in beehives to Purpur clients
 +        org.purpurmc.reactive.task.MSPTAlertTask.stopTask(); // Reactive - MSPT overload alerts
+        org.purpurmc.reactive.task.RamAlertTask.stopTask(); // Reactive - RAM usage alerts
          this.isRestarting = isRestarting;
          this.hasLoggedStop = true; // Paper - Debugging
          if (this.isDebugging()) io.papermc.paper.util.TraceUtil.dumpTraceForThread("Server stopped"); // Paper - Debugging

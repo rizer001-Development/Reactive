@@ -126,6 +126,39 @@ reactive:
 - A 10-second cooldown prevents message spam during sustained load
 - The permission and cooldown are fully configurable
 
+### 💾 RAM Usage Alerts
+
+Reactive can automatically warn players (with the `reactive.alerts` permission) when the server's JVM memory usage exceeds configured thresholds. This helps administrators detect memory leaks or insufficient RAM allocation.
+
+Configured in `config/reactive-config.yml`:
+
+```yaml
+reactive:
+  ram-alert:
+    # Enable/disable the alert system entirely
+    enabled: true
+    # RAM usage % threshold for a gold "⚡ High RAM usage" warning
+    warning-threshold: 80.0
+    # RAM usage % threshold for a red "⚠ Critical RAM usage" alert
+    critical-threshold: 90.0
+    # Minimum seconds between repeated alerts to prevent spam
+    cooldown-seconds: 10
+    # Permission node required to receive alerts
+    permission: reactive.alerts
+    # How often to check RAM usage (in ticks; 20 ticks = 1 second)
+    check-interval-ticks: 20
+```
+
+**Alert levels:**
+| RAM Usage | Message | Color |
+|-----------|---------|-------|
+| > 90% | `⚠ Critical RAM usage! X.XGB / X.XGB (XX%)` | Red |
+| > 80% | `⚡ High RAM usage! X.XGB / X.XGB (XX%)` | Gold |
+
+- Shows actual used vs max GB alongside the percentage
+- Players need the `reactive.alerts` permission to see warnings
+- 10-second cooldown prevents spam during sustained high usage
+
 ### 🗄️ SQLite Database (optional)
 
 Built-in SQLite support for storing server data:

@@ -50,6 +50,23 @@ public final class ReactiveConfig {
     public static int msptAlertIntervalTicks = 20;
 
     // ==========================================================================
+    // RAM Alert Settings
+    // ==========================================================================
+
+    /** Whether RAM usage alerts are enabled. */
+    public static boolean ramAlertEnabled = true;
+    /** RAM usage % threshold for a "high usage" warning (gold). */
+    public static double ramAlertWarningThreshold = 80.0D;
+    /** RAM usage % threshold for a "critical usage" alert (red). */
+    public static double ramAlertCriticalThreshold = 90.0D;
+    /** Cooldown in seconds between repeated alerts. */
+    public static int ramAlertCooldownSeconds = 10;
+    /** Permission required for players to receive alerts. */
+    public static String ramAlertPermission = "reactive.alerts";
+    /** Check interval in ticks (20 ticks = 1 second). */
+    public static int ramAlertIntervalTicks = 20;
+
+    // ==========================================================================
     // Init — called from Main.main
     // ==========================================================================
 
@@ -100,30 +117,55 @@ public final class ReactiveConfig {
                 return;
             }
 
+            // ── Load MSPT alert config ──
             Object msptRaw = ((Map<String, Object>) reactiveMap).get("mspt-alert");
-            if (!(msptRaw instanceof Map<?, ?> msptMap)) {
+            if (msptRaw instanceof Map<?, ?> msptMap) {
+                Map<String, Object> mspt = (Map<String, Object>) msptMap;
+
+                if (mspt.containsKey("enabled"))
+                    msptAlertEnabled = toBoolean(mspt.get("enabled"), true);
+                if (mspt.containsKey("warning-threshold"))
+                    msptAlertWarningThreshold = toDouble(mspt.get("warning-threshold"), 40.0D);
+                if (mspt.containsKey("critical-threshold"))
+                    msptAlertCriticalThreshold = toDouble(mspt.get("critical-threshold"), 50.0D);
+                if (mspt.containsKey("cooldown-seconds"))
+                    msptAlertCooldownSeconds = toInt(mspt.get("cooldown-seconds"), 10);
+                if (mspt.containsKey("permission"))
+                    msptAlertPermission = mspt.get("permission").toString();
+                if (mspt.containsKey("check-interval-ticks"))
+                    msptAlertIntervalTicks = toInt(mspt.get("check-interval-ticks"), 20);
+
+                LOGGER.info("Reactive: Loaded MSPT alert config (warning={}ms, critical={}ms, cooldown={}s, interval={}t)",
+                    msptAlertWarningThreshold, msptAlertCriticalThreshold,
+                    msptAlertCooldownSeconds, msptAlertIntervalTicks);
+            } else {
                 LOGGER.info("Reactive: No 'mspt-alert' section in config, using defaults.");
-                return;
             }
 
-            Map<String, Object> mspt = (Map<String, Object>) msptMap;
+            // ── Load RAM alert config ──
+            Object ramRaw = ((Map<String, Object>) reactiveMap).get("ram-alert");
+            if (ramRaw instanceof Map<?, ?> ramMap) {
+                Map<String, Object> ram = (Map<String, Object>) ramMap;
 
-            if (mspt.containsKey("enabled"))
-                msptAlertEnabled = toBoolean(mspt.get("enabled"), true);
-            if (mspt.containsKey("warning-threshold"))
-                msptAlertWarningThreshold = toDouble(mspt.get("warning-threshold"), 40.0D);
-            if (mspt.containsKey("critical-threshold"))
-                msptAlertCriticalThreshold = toDouble(mspt.get("critical-threshold"), 50.0D);
-            if (mspt.containsKey("cooldown-seconds"))
-                msptAlertCooldownSeconds = toInt(mspt.get("cooldown-seconds"), 10);
-            if (mspt.containsKey("permission"))
-                msptAlertPermission = mspt.get("permission").toString();
-            if (mspt.containsKey("check-interval-ticks"))
-                msptAlertIntervalTicks = toInt(mspt.get("check-interval-ticks"), 20);
+                if (ram.containsKey("enabled"))
+                    ramAlertEnabled = toBoolean(ram.get("enabled"), true);
+                if (ram.containsKey("warning-threshold"))
+                    ramAlertWarningThreshold = toDouble(ram.get("warning-threshold"), 80.0D);
+                if (ram.containsKey("critical-threshold"))
+                    ramAlertCriticalThreshold = toDouble(ram.get("critical-threshold"), 90.0D);
+                if (ram.containsKey("cooldown-seconds"))
+                    ramAlertCooldownSeconds = toInt(ram.get("cooldown-seconds"), 10);
+                if (ram.containsKey("permission"))
+                    ramAlertPermission = ram.get("permission").toString();
+                if (ram.containsKey("check-interval-ticks"))
+                    ramAlertIntervalTicks = toInt(ram.get("check-interval-ticks"), 20);
 
-            LOGGER.info("Reactive: Loaded MSPT alert config (warning={}ms, critical={}ms, cooldown={}s, interval={}t)",
-                msptAlertWarningThreshold, msptAlertCriticalThreshold,
-                msptAlertCooldownSeconds, msptAlertIntervalTicks);
+                LOGGER.info("Reactive: Loaded RAM alert config (warning={}%, critical={}%, cooldown={}s, interval={}t)",
+                    ramAlertWarningThreshold, ramAlertCriticalThreshold,
+                    ramAlertCooldownSeconds, ramAlertIntervalTicks);
+            } else {
+                LOGGER.info("Reactive: No 'ram-alert' section in config, using defaults.");
+            }
 
         } catch (Exception e) {
             LOGGER.error("Reactive: Failed to load reactive-config.yml", e);
@@ -205,6 +247,22 @@ public final class ReactiveConfig {
                 + "    # Permission node required to receive alerts\n"
                 + "    permission: reactive.alerts\n"
                 + "    # How often to check MSPT (in ticks; 20 ticks = 1 second)\n"
+                + "    check-interval-ticks: 20\n"
+                + "\n"
+                + "  # RAM usage alert settings\n"
+                + "  # Sends warnings to players with the configured permission\n"
+                + "  # when JVM memory usage exceeds the specified thresholds.\n"
+                + "  ram-alert:\n"
+                + "    enabled: true\n"
+                + "    # RAM usage % threshold for a gold 'high usage' warning\n"
+                + "    warning-threshold: 80.0\n"
+                + "    # RAM usage % threshold for a red 'critical usage' alert\n"
+                + "    critical-threshold: 90.0\n"
+                + "    # Minimum seconds between repeated alerts (prevents spam)\n"
+                + "    cooldown-seconds: 10\n"
+                + "    # Permission node required to receive alerts\n"
+                + "    permission: reactive.alerts\n"
+                + "    # How often to check RAM usage (in ticks; 20 ticks = 1 second)\n"
                 + "    check-interval-ticks: 20\n"
                 + "\n"
                 + "  # Database settings\n"

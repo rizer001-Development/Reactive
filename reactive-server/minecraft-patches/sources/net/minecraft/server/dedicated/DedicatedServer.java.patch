@@ -64,6 +64,7 @@
 +        if (org.purpurmc.purpur.PurpurConfig.beeCountPayload) org.purpurmc.purpur.task.BeehiveTask.instance().register(); // Purpur - Give bee counts in beehives to Purpur clients
 +        org.purpurmc.reactive.config.ReactiveConfig.loadReactiveConfig(); // Reactive - Load reactive config (MSPT alerts, etc.)
 +        org.purpurmc.reactive.task.MSPTAlertTask.startTask(); // Reactive - MSPT overload alerts
+        org.purpurmc.reactive.task.RamAlertTask.startTask(); // Reactive - RAM usage alerts
  
          this.saveEverything(false, true, true);
          this.notificationManager().serverStarted();
