@@ -6,22 +6,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.purpurmc.purpur.util.MinecraftInternalPlugin;
+import org.purpurmc.reactive.config.ReactiveConfig;
 
 /**
  * MSPTAlertTask — monitors server MSPT (milliseconds per tick) and sends
- * warnings to players with the {@code reactive.alerts} permission.
+ * warnings to players with the configured permission (default: {@code reactive.alerts}).
  * <p>
- * <ul>
- *   <li><b>MSPT &gt; 50</b> — critical overload warning (red)</li>
- *   <li><b>MSPT &gt; 40</b> — high load warning (gold)</li>
- *   <li><b>Cooldown:</b> 10 seconds between warnings to prevent spam</li>
- * </ul>
+ * All thresholds, cooldown, and permission are configurable via
+ * {@code config/reactive-config.yml} → {@code reactive.mspt-alert}.
  */
 public class MSPTAlertTask extends BukkitRunnable {
 
     private static MSPTAlertTask instance;
     private long lastWarningTime = 0;
-    private static final long COOLDOWN_MS = 10_000L;
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
     private MSPTAlertTask() {}
@@ -38,17 +35,21 @@ public class MSPTAlertTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        // Quick check — disabled?
+        if (!ReactiveConfig.msptAlertEnabled) return;
+
         final double mspt = Bukkit.getAverageTickTime();
         final long now = System.currentTimeMillis();
+        final long cooldownMs = ReactiveConfig.msptAlertCooldownSeconds * 1000L;
 
         // Respect cooldown
-        if (now - lastWarningTime < COOLDOWN_MS) return;
+        if (now - lastWarningTime < cooldownMs) return;
 
         final String message;
-        if (mspt > 50.0D) {
+        if (mspt > ReactiveConfig.msptAlertCriticalThreshold) {
             message = "<red>⚠ Server Overloaded!</red> <gray>MSPT: </gray><yellow>"
                 + String.format("%.1f", mspt) + "</yellow><gray> ms</gray>";
-        } else if (mspt > 40.0D) {
+        } else if (mspt > ReactiveConfig.msptAlertWarningThreshold) {
             message = "<gold>⚡ High server load!</gold> <gray>MSPT: </gray><yellow>"
                 + String.format("%.1f", mspt) + "</yellow><gray> ms</gray>";
         } else {
@@ -57,19 +58,21 @@ public class MSPTAlertTask extends BukkitRunnable {
 
         lastWarningTime = now;
         final Component msg = MM.deserialize(message);
+        final String permission = ReactiveConfig.msptAlertPermission;
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission("reactive.alerts")) {
+            if (player.hasPermission(permission)) {
                 player.sendMessage(msg);
             }
         }
     }
 
     /**
-     * Starts the task, running every 20 ticks (1 second).
+     * Starts the task, running at the configured interval.
      */
     public void start() {
-        this.runTaskTimer(new MinecraftInternalPlugin(), 20L, 20L);
+        long interval = Math.max(1, ReactiveConfig.msptAlertIntervalTicks);
+        this.runTaskTimer(new MinecraftInternalPlugin(), interval, interval);
     }
 
     /**

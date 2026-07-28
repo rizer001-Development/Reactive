@@ -2,21 +2,25 @@ package org.purpurmc.reactive.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Properties;
 
 /**
- * ReactiveConfig — инициализация директории /config/ и создание файлов по умолчанию.
+ * ReactiveConfig — инициализация директории /config/ и управление reactive-config.yml.
  * <p>
- * Вызывается на раннем этапе загрузки сервера (в Main.main), до того как сервер
- * начнёт читать конфигурационные файлы. Создаёт директорию /config/ и все
- * необходимые файлы с безопасными значениями по умолчанию, если их нет.
+ * Вызывается на раннем этапе загрузки сервера (в Main.main) для создания файлов.
+ * Загрузка конфига через {@link #loadReactiveConfig()} вызывается позже,
+ * перед стартом MSPTAlertTask.
  * <p>
  * Reactive — форк Purpur, поэтому этот конфиг дополняет PurpurConfig,
  * а не заменяет его.
@@ -27,6 +31,27 @@ public final class ReactiveConfig {
     private static final Path CONFIG_DIR = Paths.get("config");
 
     private ReactiveConfig() {}
+
+    // ==========================================================================
+    // MSPT Alert Settings
+    // ==========================================================================
+
+    /** Whether MSPT overload alerts are enabled. */
+    public static boolean msptAlertEnabled = true;
+    /** MSPT threshold for a "high load" warning (gold). */
+    public static double msptAlertWarningThreshold = 40.0D;
+    /** MSPT threshold for a "server overloaded" critical alert (red). */
+    public static double msptAlertCriticalThreshold = 50.0D;
+    /** Cooldown in seconds between repeated alerts. */
+    public static int msptAlertCooldownSeconds = 10;
+    /** Permission required for players to receive alerts. */
+    public static String msptAlertPermission = "reactive.alerts";
+    /** Check interval in ticks (20 ticks = 1 second). */
+    public static int msptAlertIntervalTicks = 20;
+
+    // ==========================================================================
+    // Init — called from Main.main
+    // ==========================================================================
 
     /**
      * Инициализация: создаёт /config/ и дефолтные конфиги.
@@ -43,6 +68,71 @@ public final class ReactiveConfig {
             LOGGER.error("Reactive: Failed to initialize configuration", e);
         }
     }
+
+    // ==========================================================================
+    // Load — called from DedicatedServer.boot() before MSPTAlertTask.startTask()
+    // ==========================================================================
+
+    /**
+     * Loads reactive-config.yml and populates the static config fields.
+     * Called after the server is fully initialized, right before MSPTAlertTask starts.
+     */
+    @SuppressWarnings("unchecked")
+    public static void loadReactiveConfig() {
+        Path configPath = CONFIG_DIR.resolve("reactive-config.yml");
+        if (!Files.exists(configPath)) {
+            LOGGER.warn("Reactive: reactive-config.yml not found, using defaults.");
+            return;
+        }
+
+        try (InputStream in = new FileInputStream(configPath.toFile())) {
+            Yaml yaml = new Yaml();
+            Object raw = yaml.load(in);
+
+            if (!(raw instanceof Map<?, ?> rootMap)) {
+                LOGGER.warn("Reactive: Invalid reactive-config.yml structure, using defaults.");
+                return;
+            }
+
+            Object reactiveRaw = rootMap.get("reactive");
+            if (!(reactiveRaw instanceof Map<?, ?> reactiveMap)) {
+                LOGGER.warn("Reactive: Missing 'reactive' key in reactive-config.yml, using defaults.");
+                return;
+            }
+
+            Object msptRaw = ((Map<String, Object>) reactiveMap).get("mspt-alert");
+            if (!(msptRaw instanceof Map<?, ?> msptMap)) {
+                LOGGER.info("Reactive: No 'mspt-alert' section in config, using defaults.");
+                return;
+            }
+
+            Map<String, Object> mspt = (Map<String, Object>) msptMap;
+
+            if (mspt.containsKey("enabled"))
+                msptAlertEnabled = toBoolean(mspt.get("enabled"), true);
+            if (mspt.containsKey("warning-threshold"))
+                msptAlertWarningThreshold = toDouble(mspt.get("warning-threshold"), 40.0D);
+            if (mspt.containsKey("critical-threshold"))
+                msptAlertCriticalThreshold = toDouble(mspt.get("critical-threshold"), 50.0D);
+            if (mspt.containsKey("cooldown-seconds"))
+                msptAlertCooldownSeconds = toInt(mspt.get("cooldown-seconds"), 10);
+            if (mspt.containsKey("permission"))
+                msptAlertPermission = mspt.get("permission").toString();
+            if (mspt.containsKey("check-interval-ticks"))
+                msptAlertIntervalTicks = toInt(mspt.get("check-interval-ticks"), 20);
+
+            LOGGER.info("Reactive: Loaded MSPT alert config (warning={}ms, critical={}ms, cooldown={}s, interval={}t)",
+                msptAlertWarningThreshold, msptAlertCriticalThreshold,
+                msptAlertCooldownSeconds, msptAlertIntervalTicks);
+
+        } catch (Exception e) {
+            LOGGER.error("Reactive: Failed to load reactive-config.yml", e);
+        }
+    }
+
+    // ==========================================================================
+    // File creation helpers
+    // ==========================================================================
 
     private static void createConfigDir() throws IOException {
         if (!Files.exists(CONFIG_DIR)) {
@@ -101,6 +191,22 @@ public final class ReactiveConfig {
                 + "    enabled: false\n"
                 + "    max-xz: 67000000\n"
                 + "\n"
+                + "  # MSPT (Milliseconds Per Tick) alert settings\n"
+                + "  # Sends warnings to players with the configured permission\n"
+                + "  # when server MSPT exceeds the specified thresholds.\n"
+                + "  mspt-alert:\n"
+                + "    enabled: true\n"
+                + "    # MSPT threshold for a yellow 'high load' warning\n"
+                + "    warning-threshold: 40.0\n"
+                + "    # MSPT threshold for a red 'server overloaded' critical alert\n"
+                + "    critical-threshold: 50.0\n"
+                + "    # Minimum seconds between repeated alerts (prevents spam)\n"
+                + "    cooldown-seconds: 10\n"
+                + "    # Permission node required to receive alerts\n"
+                + "    permission: reactive.alerts\n"
+                + "    # How often to check MSPT (in ticks; 20 ticks = 1 second)\n"
+                + "    check-interval-ticks: 20\n"
+                + "\n"
                 + "  # Database settings\n"
                 + "  database:\n"
                 + "    enabled: false\n"
@@ -113,5 +219,31 @@ public final class ReactiveConfig {
             Files.writeString(configFile.toPath(), content);
             LOGGER.info("Reactive: Created reactive-config.yml in config/ directory.");
         }
+    }
+
+    // ==========================================================================
+    // Type conversion helpers
+    // ==========================================================================
+
+    private static boolean toBoolean(Object value, boolean defaultValue) {
+        if (value instanceof Boolean b) return b;
+        if (value instanceof String s) return Boolean.parseBoolean(s);
+        return defaultValue;
+    }
+
+    private static double toDouble(Object value, double defaultValue) {
+        if (value instanceof Number n) return n.doubleValue();
+        if (value instanceof String s) {
+            try { return Double.parseDouble(s); } catch (NumberFormatException ignored) {}
+        }
+        return defaultValue;
+    }
+
+    private static int toInt(Object value, int defaultValue) {
+        if (value instanceof Number n) return n.intValue();
+        if (value instanceof String s) {
+            try { return Integer.parseInt(s); } catch (NumberFormatException ignored) {}
+        }
+        return defaultValue;
     }
 }

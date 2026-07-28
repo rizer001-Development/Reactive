@@ -93,6 +93,39 @@ Adds the `/ui` command for server management. See the project's
 
 Reactive automatically accepts the EULA on your behalf on first launch. This is recorded in the database and does not require manually editing `eula.txt`.
 
+### 📊 MSPT Server Load Alerts
+
+Reactive can automatically warn players (with the `reactive.alerts` permission) when the server's MSPT (Milliseconds Per Tick) exceeds configured thresholds. This helps server administrators detect performance issues in real time.
+
+Configured in `config/reactive-config.yml`:
+
+```yaml
+reactive:
+  mspt-alert:
+    # Enable/disable the alert system entirely
+    enabled: true
+    # MSPT threshold for a yellow "⚡ High server load" warning
+    warning-threshold: 40.0
+    # MSPT threshold for a red "⚠ Server Overloaded" critical alert
+    critical-threshold: 50.0
+    # Minimum seconds between repeated alerts to prevent spam
+    cooldown-seconds: 10
+    # Permission node required to receive alerts
+    permission: reactive.alerts
+    # How often to check MSPT (in ticks; 20 ticks = 1 second)
+    check-interval-ticks: 20
+```
+
+**Alert levels:**
+| MSPT | Message | Color |
+|------|---------|-------|
+| > 50 ms | `⚠ Server Overloaded! MSPT: X ms` | Red |
+| > 40 ms | `⚡ High server load! MSPT: X ms` | Gold |
+
+- Players need the `reactive.alerts` permission to see warnings
+- A 10-second cooldown prevents message spam during sustained load
+- The permission and cooldown are fully configurable
+
 ### 🗄️ SQLite Database (optional)
 
 Built-in SQLite support for storing server data:
