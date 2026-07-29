@@ -1,5 +1,14 @@
 --- a/net/minecraft/server/MinecraftServer.java
 +++ b/net/minecraft/server/MinecraftServer.java
+@@ -217,7 +_,7 @@
+     public static final NameAndId ANONYMOUS_PLAYER_PROFILE = new NameAndId(Util.NIL_UUID, "Anonymous Player");
+     public static final String SERVER_THREAD_NAME = "Server thread";
+     public LevelStorageSource.LevelStorageAccess storageSource;
+-    public final PlayerDataStorage playerDataStorage;
++    protected final PlayerDataStorage playerDataStorage;
+     private final SavedDataStorage savedDataStorage;
+     private final List<Runnable> tickables = Lists.newArrayList();
+     // Paper - per-level GameRules
 @@ -319,6 +_,7 @@
      public joptsimple.OptionSet options;
      public org.bukkit.command.ConsoleCommandSender console;
@@ -47,8 +56,9 @@
      public void halt(final boolean wait, final boolean isRestarting) {
 +        org.purpurmc.purpur.task.BossBarTask.stopAll(); // Purpur - Implement TPSBar
 +        org.purpurmc.purpur.task.BeehiveTask.instance().unregister(); // Purpur - Give bee counts in beehives to Purpur clients
-+        org.purpurmc.reactive.task.MSPTAlertTask.stopTask(); // Reactive - MSPT overload alerts
-        org.purpurmc.reactive.task.RamAlertTask.stopTask(); // Reactive - RAM usage alerts
++        org.purpurmc.reactive.task.MSPTAlertTask.stopTask(); // Reactive - MSPT
++        org.purpurmc.reactive.task.RamAlertTask.stopTask(); // Reactive - RAM
++        org.purpurmc.reactive.task.EntityTickLimiterTask.stopTask(); // Reactive - Entity Tick Limiter
          this.isRestarting = isRestarting;
          this.hasLoggedStop = true; // Paper - Debugging
          if (this.isDebugging()) io.papermc.paper.util.TraceUtil.dumpTraceForThread("Server stopped"); // Paper - Debugging

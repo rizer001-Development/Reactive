@@ -62,9 +62,10 @@
 +
 +        org.purpurmc.purpur.task.BossBarTask.startAll(); // Purpur - Implement TPSBar
 +        if (org.purpurmc.purpur.PurpurConfig.beeCountPayload) org.purpurmc.purpur.task.BeehiveTask.instance().register(); // Purpur - Give bee counts in beehives to Purpur clients
-+        org.purpurmc.reactive.config.ReactiveConfig.loadReactiveConfig(); // Reactive - Load reactive config (MSPT alerts, etc.)
++        org.purpurmc.reactive.config.ReactiveConfig.loadReactiveConfig(); // Reactive - Load reactive config (MSPT, RAM, Entity Tick Limiter)
 +        org.purpurmc.reactive.task.MSPTAlertTask.startTask(); // Reactive - MSPT overload alerts
-        org.purpurmc.reactive.task.RamAlertTask.startTask(); // Reactive - RAM usage alerts
++        org.purpurmc.reactive.task.RamAlertTask.startTask(); // Reactive - RAM usage alerts
++        org.purpurmc.reactive.task.EntityTickLimiterTask.startTask(); // Reactive - Entity Tick Limiter
  
          this.saveEverything(false, true, true);
          this.notificationManager().serverStarted();

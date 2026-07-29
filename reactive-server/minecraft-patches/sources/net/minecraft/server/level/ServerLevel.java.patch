@@ -33,9 +33,9 @@
          int percentage = this.getGameRules().get(GameRules.PLAYERS_SLEEPING_PERCENTAGE);
 -        if (this.sleepStatus.areEnoughSleeping(percentage) && this.sleepStatus.areEnoughDeepSleeping(percentage, this.players)) {
 +        if (this.purpurConfig.playersSkipNight && this.sleepStatus.areEnoughSleeping(percentage) && this.sleepStatus.areEnoughDeepSleeping(percentage, this.players)) { // Purpur - Config for skipping night
-             Optional<Holder<WorldClock>> defaultClock = this.dimensionType().defaultClock();
-             org.bukkit.event.world.ClockTimeSkipEvent event = null; // Paper - per-world time
-             if (this.getGameRules().get(GameRules.ADVANCE_TIME) && defaultClock.isPresent()) {
+             if (this.dimensionType().hasCeiling()) {
+                 // Purpur start - Configurable weather time / cycle
+                 long weatherTime = this.serverLevelData.getWeatherData().getRainTime();
 @@ -1051,9 +_,17 @@
                      && this.random.nextDouble() < difficulty.getEffectiveDifficulty() * this.paperConfig().entities.spawning.skeletonHorseThunderSpawnChance.or(0.01) // Paper - Configurable spawn chances for skeleton horses
                      && !this.getBlockState(pos.below()).is(BlockTags.LIGHTNING_RODS);
@@ -144,6 +144,23 @@
          weatherData.setThundering(false, org.bukkit.event.weather.ThunderChangeEvent.Cause.SLEEP); // Paper - Add cause to Weather/ThunderChangeEvents
          // CraftBukkit start
          // If we stop due to everyone sleeping we should reset the weather duration to some other random value.
+@@ -1393,6 +_,7 @@
+     public void tickNonPassenger(final Entity entity) {
+         // Paper start - log detailed entity tick information
+         ca.spottedleaf.moonrise.common.util.TickThread.ensureTickThread("Cannot tick an entity off-main");
++        org.purpurmc.reactive.entity.EntityTickMonitor.startEntityTick(entity); // Reactive - Entity Tick Limiter
+         try {
+             if (currentlyTickingEntity.get() == null) {
+                 currentlyTickingEntity.lazySet(entity);
+@@ -1400,7 +_,11 @@
+     if (isActive) { // Paper - EAR 2
++    boolean __reactiveSkipped = org.purpurmc.reactive.entity.EntityTickMonitor.shouldSkipTick(entity); // Reactive - Entity Tick Limiter
++    if (!__reactiveSkipped) // Reactive - Entity Tick Limiter
+     entity.tick();
+     entity.postTick(); // CraftBukkit
+     } else {entity.inactiveTick();} // Paper - EAR 2
++    org.purpurmc.reactive.entity.EntityTickMonitor.endEntityTick(entity); // Reactive - Entity Tick Limiter
+     profiler.pop();
 @@ -2004,7 +_,7 @@
          Explosion.BlockInteraction blockInteraction = switch (interactionType) {
              case NONE -> Explosion.BlockInteraction.KEEP;

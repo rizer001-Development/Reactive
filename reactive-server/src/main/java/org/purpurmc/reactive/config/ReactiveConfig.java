@@ -67,6 +67,23 @@ public final class ReactiveConfig {
     public static int ramAlertIntervalTicks = 20;
 
     // ==========================================================================
+    // Entity Tick Limiter Settings
+    // ==========================================================================
+
+    /** Whether entity tick limiting is enabled. */
+    public static boolean entityTickLimiterEnabled = true;
+    /** MSPT threshold above which entity tick limiting activates. */
+    public static double entityTickLimiterThreshold = 50.0D;
+    /** Minimum contribution % of total entity tick time for a type to be paused. */
+    public static double entityTickLimiterMinContributionPercent = 20.0D;
+    /** Cooldown in seconds between repeated announcements. */
+    public static int entityTickLimiterCooldownSeconds = 10;
+    /** Permission required for players to receive announcements. */
+    public static String entityTickLimiterPermission = "reactive.alerts";
+    /** Check interval in ticks. */
+    public static int entityTickLimiterCheckIntervalTicks = 20;
+
+    // ==========================================================================
     // Init — called from Main.main
     // ==========================================================================
 
@@ -167,6 +184,31 @@ public final class ReactiveConfig {
                 LOGGER.info("Reactive: No 'ram-alert' section in config, using defaults.");
             }
 
+            // ── Load Entity Tick Limiter config ──
+            Object tickLimiterRaw = ((Map<String, Object>) reactiveMap).get("entity-tick-limiter");
+            if (tickLimiterRaw instanceof Map<?, ?> tickLimiterMap) {
+                Map<String, Object> tlm = (Map<String, Object>) tickLimiterMap;
+
+                if (tlm.containsKey("enabled"))
+                    entityTickLimiterEnabled = toBoolean(tlm.get("enabled"), true);
+                if (tlm.containsKey("threshold-mspt"))
+                    entityTickLimiterThreshold = toDouble(tlm.get("threshold-mspt"), 50.0D);
+                if (tlm.containsKey("min-contribution-percent"))
+                    entityTickLimiterMinContributionPercent = toDouble(tlm.get("min-contribution-percent"), 20.0D);
+                if (tlm.containsKey("cooldown-seconds"))
+                    entityTickLimiterCooldownSeconds = toInt(tlm.get("cooldown-seconds"), 10);
+                if (tlm.containsKey("permission"))
+                    entityTickLimiterPermission = tlm.get("permission").toString();
+                if (tlm.containsKey("check-interval-ticks"))
+                    entityTickLimiterCheckIntervalTicks = toInt(tlm.get("check-interval-ticks"), 20);
+
+                LOGGER.info("Reactive: Loaded Entity Tick Limiter config (threshold={}ms, minContribution={}%, cooldown={}s, interval={}t)",
+                    entityTickLimiterThreshold, entityTickLimiterMinContributionPercent,
+                    entityTickLimiterCooldownSeconds, entityTickLimiterCheckIntervalTicks);
+            } else {
+                LOGGER.info("Reactive: No 'entity-tick-limiter' section in config, using defaults.");
+            }
+
         } catch (Exception e) {
             LOGGER.error("Reactive: Failed to load reactive-config.yml", e);
         }
@@ -263,6 +305,25 @@ public final class ReactiveConfig {
                 + "    # Permission node required to receive alerts\n"
                 + "    permission: reactive.alerts\n"
                 + "    # How often to check RAM usage (in ticks; 20 ticks = 1 second)\n"
+                + "    check-interval-ticks: 20\n"
+                + "\n"
+                + "\n"
+                + "  # Entity Tick Limiter settings\n"
+                + "  # When the server is overloaded (MSPT > threshold), monitors\n"
+                + "  # per-entity-type tick time consumption. If a specific entity\n"
+                + "  # type contributes more than min-contribution-percent of total\n"
+                + "  # entity tick time, its ticking is paused until the server recovers.\n"
+                + "  entity-tick-limiter:\n"
+                + "    enabled: true\n"
+                + "    # MSPT threshold to activate tick limiting\n"
+                + "    threshold-mspt: 50.0\n"
+                + "    # Minimum % of total entity tick time for a type to be paused\n"
+                + "    min-contribution-percent: 20.0\n"
+                + "    # Minimum seconds between repeated announcements\n"
+                + "    cooldown-seconds: 10\n"
+                + "    # Permission node required to receive announcements\n"
+                + "    permission: reactive.alerts\n"
+                + "    # How often to check entity tick times (in ticks; 20 = 1 second)\n"
                 + "    check-interval-ticks: 20\n"
                 + "\n"
                 + "  # Database settings\n"

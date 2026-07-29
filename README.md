@@ -159,6 +159,43 @@ reactive:
 - Players need the `reactive.alerts` permission to see warnings
 - 10-second cooldown prevents spam during sustained high usage
 
+### 🧟 Entity Tick Limiter
+
+Reactive can automatically detect entity types that consume excessive tick time and **pause their ticking** until the server recovers. This prevents a single laggy entity type (e.g., a mob farm with thousands of zombies) from degrading the entire server experience.
+
+Configured in `config/reactive-config.yml`:
+
+```yaml
+reactive:
+  entity-tick-limiter:
+    # Enable/disable the entity tick limiter entirely
+    enabled: true
+    # MSPT threshold to activate tick limiting (server is overloaded)
+    threshold-mspt: 50.0
+    # Minimum % of total entity tick time for a type to be paused.
+    # E.g., 20.0 means an entity type must consume at least 20%
+    # of all entity tick time to be paused.
+    min-contribution-percent: 20.0
+    # Minimum seconds between repeated announcements
+    cooldown-seconds: 10
+    # Permission node required to receive announcements
+    permission: reactive.alerts
+    # How often to check entity tick times (in ticks; 20 = 1 second)
+    check-interval-ticks: 20
+```
+
+**How it works:**
+| Trigger | Action |
+|---------|--------|
+| MSPT > threshold (50ms by default) | Reactive analyzes per-entity-type tick time consumption |
+| Entity type contributes > min-contribution-percent | That entity type's `tick()` is **skipped** until the server recovers |
+| MSPT drops below threshold | All paused entity types resume normal ticking |
+
+- Players with `reactive.alerts` permission receive announcements when entity types are paused
+- A 10-second cooldown prevents message spam during sustained load
+- Once the server recovers, all entity types are automatically unpaused
+- **Completely safe** — entity state is preserved, only `tick()` is temporarily bypassed
+
 ### 🗄️ SQLite Database (optional)
 
 Built-in SQLite support for storing server data:
