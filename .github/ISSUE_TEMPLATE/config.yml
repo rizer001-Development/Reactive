@@ -4,10 +4,10 @@ contact_links:
     url: https://github.com/rizer001/Reactive/discussions/new?category=feature-requests
     about: Suggest an idea for Reactive
   - name: Exploit Report
-    url: https://github.com/rizer001/Reactive/issues/new
+    url: https://github.com/rizer001/Reactive/security/advisories/new
     about: |
-      Since GitHub does not allow private issues, exploit reports are currently handled through GitHub Issues.
-      Please use the bug report template and mark it as sensitive.
+      If you've found a security or exploit issue, please report it privately
+      via the Security Advisories tab so it can be addressed before disclosure.
   - name: Reactive Discord
     url: https://github.com/rizer001/Reactive
     about: Join our community for help and discussion!
