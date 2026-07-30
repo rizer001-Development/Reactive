@@ -4,7 +4,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Before reporting performance problems here, please make sure you are on the latest version of Purpur.
+        Before reporting performance problems here, please make sure you are on the latest version of Reactive.
   - type: input
     attributes:
       label: Spark link
@@ -20,7 +20,7 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Purpur version
+      label: Reactive version
       description: |
         Run `/version` on your server and **paste** the full, unmodified output here.
         "latest" is *not* a version; we require the output of `/version` so we can adequately track down the issue.
@@ -31,9 +31,9 @@ body:
         ```
         > version
         [18:58:15 INFO]: Checking version, please wait...
-        [18:58:15 INFO]: This server is running Purpur version git-Purpur-1126 (MC: 1.16.5) (Implementing API version 1.16.5-R0.1-SNAPSHOT)
+        [18:58:15 INFO]: This server is running Reactive version git-Reactive-1.0.0 (MC: 26.2) (Implementing API version 26.2-R0.1-SNAPSHOT)
         [18:58:15 INFO]: You are running the latest version
-        [18:58:15 INFO]: Previous version: git-Purpur-1120 (MC: 1.16.5)
+        [18:58:15 INFO]: Previous version: git-Reactive-0.9.0 (MC: 26.2)
         ```
 
         </details>
@@ -44,13 +44,11 @@ body:
       label: Agreements
       description: Please agree to the following.
       options:
-        - label: I am running the latest version of Purpur available from https://purpurmc.org/downloads.
+        - label: I am running the latest version of Reactive available from https://github.com/rizer001/Reactive/releases.
           required: true
         - label: I have searched for and ensured there isn't already an open issue regarding this.
           required: true
-        - label: I ticked all the boxes without actually reading them
-          required: false
-        - label: My version of Minecraft is supported by Purpur.
+        - label: My version of Minecraft is supported by Reactive.
           required: true
   - type: textarea
     attributes:

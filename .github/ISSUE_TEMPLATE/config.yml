@@ -1,13 +1,13 @@
 blank_issues_enabled: false
 contact_links:
   - name: Feature Request
-    url: https://github.com/PurpurMC/Purpur/discussions/new?category=feature-requests
-    about: Suggest an idea for Purpur
+    url: https://github.com/rizer001/Reactive/discussions/new?category=feature-requests
+    about: Suggest an idea for Reactive
   - name: Exploit Report
-    url: https://purpurmc.org/discord
+    url: https://github.com/rizer001/Reactive/issues/new
     about: |
-      Since GitHub does not allow private issues, exploit reports are currently handled through our Discord.
-      To report an exploit, contact a moderator on the Purpur Discord.
-  - name: Purpur Discord
-    url: https://purpurmc.org/discord
-    about: If you are having issues with Spark profiling or have other minor issues, come join our Discord server for help!
+      Since GitHub does not allow private issues, exploit reports are currently handled through GitHub Issues.
+      Please use the bug report template and mark it as sensitive.
+  - name: Reactive Discord
+    url: https://github.com/rizer001/Reactive
+    about: Join our community for help and discussion!

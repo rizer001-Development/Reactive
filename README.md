@@ -7,7 +7,9 @@
 [![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?&logo=github)](LICENSE)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/rizer001/Reactive/build.yml?branch=main&event=push&logo=github)](https://github.com/rizer001/Reactive/actions)
 [![GitHub release](https://img.shields.io/github/v/release/rizer001/Reactive?include_prereleases&logo=github)](https://github.com/rizer001/Reactive/releases)
-[![Discord](https://img.shields.io/discord/685683385313919172?logo=discord&label=Discord)](https://purpurmc.org/discord)
+[![Minecraft](https://img.shields.io/badge/Minecraft-26.2-success?logo=minecraft&logoColor=white)](https://github.com/rizer001/Reactive)
+[![Stars](https://img.shields.io/github/stars/rizer001/Reactive?logo=github)](https://github.com/rizer001/Reactive/stargazers)
+[![GitHub commits since latest release](https://img.shields.io/github/commits-since/rizer001/Reactive/latest?logo=git)](https://github.com/rizer001/Reactive/commits/main)
 
 **Reactive** is a high-performance fork of [Purpur](https://github.com/PurpurMC/Purpur) for Minecraft 26.2, built on top of [Paper](https://github.com/PaperMC/Paper).  
 It inherits all Purpur features and adds its own improvements: extended world height, auto-configuration on first launch, integrated SQLite database, and more.
@@ -244,14 +246,12 @@ cd Reactive
 # Apply all patches
 ./gradlew applyAllPatches
 
-# Build the server
+# Build the server (produces the runnable JAR)
 ./gradlew build
-
-# Build the server-ready JAR
-./gradlew createReactiveJar
 ```
 
-The built JAR will be at `build/libs/reactive-server.jar` or `reactive-server/build/libs/reactive-server.jar`.
+The built JAR will be at `reactive-server/build/libs/reactive-server-<version>.jar`.  
+You can also find a paperclip-style executable at `reactive-server/build/libs/reactive-paperclip-<version>.jar`.
 
 ### Building in an IDE
 After running `./gradlew applyAllPatches`, the project is ready to import into IntelliJ IDEA or Eclipse.
