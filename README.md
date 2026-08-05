@@ -10,6 +10,7 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.2-success?logo=minecraft&logoColor=white)](https://github.com/rizer001/Reactive)
 [![Stars](https://img.shields.io/github/stars/rizer001/Reactive?logo=github)](https://github.com/rizer001/Reactive/stargazers)
 [![GitHub commits since latest release](https://img.shields.io/github/commits-since/rizer001/Reactive/latest?logo=git)](https://github.com/rizer001/Reactive/commits/main)
+[![Development status](https://img.shields.io/badge/status-In_development-yellow)](https://github.com/rizer001/Reactive)
 
 **Reactive** is a high-performance fork of [Purpur](https://github.com/PurpurMC/Purpur) for Minecraft 26.2, built on top of [Paper](https://github.com/PaperMC/Paper).  
 It inherits all Purpur features and adds its own improvements: extended world height, auto-configuration on first launch, integrated SQLite database, and more.
@@ -339,7 +340,7 @@ See [PaperMC/Paper](https://github.com/PaperMC/Paper) and [PurpurMC/Purpur](http
 
 ## 🚧 Development Status
 
-**Reactive is currently in active development.** New features, improvements, and bug fixes are being added regularly.
+**Development status: 🟡 In development.** Reactive is currently in active development. New features, improvements, and bug fixes are being added regularly.
 
 Planned additions include:
 - ✅ Extended world height (up to 2048 blocks)

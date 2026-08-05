@@ -1,5 +1,14 @@
 --- a/net/minecraft/world/entity/monster/Shulker.java
 +++ b/net/minecraft/world/entity/monster/Shulker.java
+@@ -80,7 +_,7 @@
+     private static final byte DEFAULT_PEEK = 0;
+     private static final Direction DEFAULT_ATTACH_FACE = Direction.DOWN;
+     private static final Vector3fc FORWARD = Direction.SOUTH.getUnitVec3f();
+-    public static final float MAX_SCALE = 3.0F;
++    private static final float MAX_SCALE = 3.0F;
+     private float currentPeekAmountO;
+     private float currentPeekAmount;
+     private @Nullable BlockPos clientOldAttachPosition;
 @@ -93,6 +_,22 @@
          this.lookControl = new Shulker.ShulkerLookControl(this);
      }
