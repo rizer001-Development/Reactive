@@ -320,8 +320,6 @@ The API includes all interfaces from Paper, Spigot, and Bukkit.
 
 This project is licensed under the **GNU Affero General Public License v3.0** (AGPLv3).
 
-[![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?&logo=github)](LICENSE)
-
 See [PaperMC/Paper](https://github.com/PaperMC/Paper) and [PurpurMC/Purpur](https://github.com/PurpurMC/Purpur) for the license of material used by this project.
 
 ---
