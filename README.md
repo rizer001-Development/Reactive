@@ -5,12 +5,12 @@
 # Reactive
 
 [![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?&logo=github)](LICENSE)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/rizer001/Reactive/build.yml?branch=main&event=push&logo=github)](https://github.com/rizer001/Reactive/actions)
-[![GitHub release](https://img.shields.io/github/v/release/rizer001/Reactive?include_prereleases&logo=github)](https://github.com/rizer001/Reactive/releases)
-[![Minecraft](https://img.shields.io/badge/Minecraft-26.2-success?logo=minecraft&logoColor=white)](https://github.com/rizer001/Reactive)
-[![Stars](https://img.shields.io/github/stars/rizer001/Reactive?logo=github)](https://github.com/rizer001/Reactive/stargazers)
-[![GitHub commits since latest release](https://img.shields.io/github/commits-since/rizer001/Reactive/latest?logo=git)](https://github.com/rizer001/Reactive/commits/main)
-[![Development status](https://img.shields.io/badge/status-In_development-yellow)](https://github.com/rizer001/Reactive)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/rizer001-Development/Reactive/build.yml?branch=main&event=push&logo=github)](https://github.com/rizer001-Development/Reactive/actions)
+[![GitHub release](https://img.shields.io/github/v/release/rizer001-Development/Reactive?include_prereleases&logo=github)](https://github.com/rizer001-Development/Reactive/releases)
+[![Minecraft](https://img.shields.io/badge/Minecraft-26.2-success?logo=minecraft&logoColor=white)](https://github.com/rizer001-Development/Reactive)
+[![Stars](https://img.shields.io/github/stars/rizer001-Development/Reactive?logo=github)](https://github.com/rizer001-Development/Reactive/stargazers)
+[![GitHub commits since latest release](https://img.shields.io/github/commits-since/rizer001-Development/Reactive/latest?logo=git)](https://github.com/rizer001-Development/Reactive/commits/main)
+[![Development status](https://img.shields.io/badge/status-In_development-yellow)](https://github.com/rizer001-Development/Reactive)
 
 **Reactive** is a high-performance fork of [Purpur](https://github.com/PurpurMC/Purpur) for Minecraft 26.2, built on top of [Paper](https://github.com/PaperMC/Paper).
 
@@ -23,7 +23,7 @@ It inherits all Purpur features and adds its own improvements: extended world he
 
 ---
 
-**Download latest build:** [GitHub Releases](https://github.com/rizer001/Reactive/releases)
+**Download latest build:** [GitHub Releases](https://github.com/rizer001-Development/Reactive/releases)
 
 ---
 
@@ -91,12 +91,12 @@ On first startup, Reactive automatically creates the `config/` directory and gen
 
 ### 🧩 Companion Plugin — UltimateImprovments
 
-[**UltimateImprovments**](https://github.com/rizer001/UltimateImprovments) (UI) is an addon plugin designed specifically for Reactive.
+[**UltimateImprovments**](https://github.com/rizer001-Development/UltimateImprovments) (UI) is an addon plugin designed specifically for Reactive.
 It provides authentication (Custom Screen dialogs), anti-cheat, player management commands,
 and other server-side features that complement the core server.
 
 Adds the `/ui` command for server management. See the project's
-[README](https://github.com/rizer001/UltimateImprovments) for full documentation.
+[README](https://github.com/rizer001-Development/UltimateImprovments) for full documentation.
 
 ### 🔒 EULA Auto-Accept
 
@@ -228,7 +228,7 @@ reactive:
 
 ## 📦 Installation
 
-1. **Download** the latest JAR from [Releases](https://github.com/rizer001/Reactive/releases)
+1. **Download** the latest JAR from [Releases](https://github.com/rizer001-Development/Reactive/releases)
 2. **Replace** your current server JAR with `reactive-server.jar`
 3. **Start** the server. Reactive will create the `config/` folder and all required files automatically
 4. **Configure** `config/reactive-config.yml` to your needs
@@ -247,7 +247,7 @@ reactive:
 
 ```bash
 # Clone the repository
-git clone https://github.com/rizer001/Reactive.git
+git clone https://github.com/rizer001-Development/Reactive.git
 cd Reactive
 
 # Apply all patches
@@ -338,7 +338,7 @@ See [PaperMC/Paper](https://github.com/PaperMC/Paper) and [PurpurMC/Purpur](http
 
 <div align="center">
 
-**[GitHub](https://github.com/rizer001/Reactive)** · **[Releases](https://github.com/rizer001/Reactive/releases)** · **[Issues](https://github.com/rizer001/Reactive/issues)**
+**[GitHub](https://github.com/rizer001-Development/Reactive)** · **[Releases](https://github.com/rizer001-Development/Reactive/releases)** · **[Issues](https://github.com/rizer001-Development/Reactive/issues)**
 
 </div>
 
@@ -356,4 +356,4 @@ Planned additions include:
 - 🔄 **Deeper UltimateImprovments integration** — seamless compatibility with the companion plugin
 - 🔄 **New APIs** — additional hooks for plugin developers
 
-Stay tuned for updates! Follow the [Releases page](https://github.com/rizer001/Reactive/releases) to be notified of new builds.
+Stay tuned for updates! Follow the [Releases page](https://github.com/rizer001-Development/Reactive/releases) to be notified of new builds.
