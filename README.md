@@ -12,7 +12,13 @@
 [![GitHub commits since latest release](https://img.shields.io/github/commits-since/rizer001/Reactive/latest?logo=git)](https://github.com/rizer001/Reactive/commits/main)
 [![Development status](https://img.shields.io/badge/status-In_development-yellow)](https://github.com/rizer001/Reactive)
 
-**Reactive** is a high-performance fork of [Purpur](https://github.com/PurpurMC/Purpur) for Minecraft 26.2, built on top of [Paper](https://github.com/PaperMC/Paper).  
+**Reactive** is a high-performance fork of [Purpur](https://github.com/PurpurMC/Purpur) for Minecraft 26.2, built on top of [Paper](https://github.com/PaperMC/Paper).
+
+---
+
+### 📄 Organization Docs
+
+[![Guide](https://img.shields.io/badge/Guide-rizer001--Development-00AEFF)](https://github.com/rizer001-Development/.github/blob/main/GUIDE.md) · [![Contributing](https://img.shields.io/badge/Contributing-rizer001--Development-4CAF50)](https://github.com/rizer001-Development/.github/blob/main/CONTRIBUTING.md) · [![Security](https://img.shields.io/badge/Security-rizer001--Development-D9534F)](https://github.com/rizer001-Development/.github/blob/main/SECURITY.md) · [![Code of Conduct](https://img.shields.io/badge/Code%20of%20Conduct-rizer001--Development-5BC0DE)](https://github.com/rizer001-Development/.github/blob/main/CODE_OF_CONDUCT.md)  
 It inherits all Purpur features and adds its own improvements: extended world height, auto-configuration on first launch, integrated SQLite database, and more.
 
 ---
