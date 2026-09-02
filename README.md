@@ -15,7 +15,7 @@ Reactive is a **vanilla Minecraft server fork** — we take Mojang's decompiled 
 - **ASM patching** — build-time bytecode modification (per-world game rules)
 
 ### ✅ Configuration
-- `server.toml` — replaces `server.properties` (TOML format, sections, comments)
+- `server.toml` — server settings (TOML format, sections, comments)
 - `reactive.toml` — Reactive-specific settings
 - `gamerules.toml` — per-world game rules (auto-saved, hot-reloadable)
 - `ops.toml`, `whitelist.toml`, `banned-players.toml`, `banned-ips.toml`, `usercache.toml`

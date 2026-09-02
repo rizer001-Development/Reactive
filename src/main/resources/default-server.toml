@@ -1,14 +1,18 @@
-# Minecraft Server Configuration
-# Change the values below and restart the server for the changes to take effect.
+# Reactive Server Configuration (server.toml)
+# Edit values and RESTART the server to apply changes.
+# This file is never rewritten by the server. Delete it to regenerate defaults.
 
+# ============================================================
+# [server] — main server settings
+# ============================================================
 [server]
-# Server port
-port = 25565
+# Port to listen on
+server-port = 25565
 
-# Server IP (leave empty for all interfaces)
-ip = ""
+# IP to bind to (empty = all interfaces)
+server-ip = ""
 
-# Maximum players
+# Max players
 max-players = 20
 
 # Online mode (verify accounts with Mojang)
@@ -20,59 +24,80 @@ motd = "A Reactive Server"
 # World name
 level-name = "world"
 
-# World seed (leave empty for random)
+# World seed (empty = random)
 level-seed = ""
 
-# World type (default, flat, largebiomes, amplified)
-level-type = "default"
+# World type: normal, flat, large_biomes, amplified
+level-type = "minecraft:normal"
 
-# Difficulty (peaceful, easy, normal, hard)
+# difficulty: peaceful, easy, normal, hard
 difficulty = "easy"
 
-# Gamemode (survival, creative, adventure, spectator)
+# gamemode: survival, creative, adventure, spectator
 gamemode = "survival"
 
-# Hardcore mode
+# Hardcore mode (forces difficulty hard + death ban)
 hardcore = false
 
-# Allow player vs player
+# Player vs player combat
 pvp = true
 
-# Allow flying in survival
+# Allow flight in survival
 allow-flight = false
 
-# Spawn protection radius (0 to disable)
+# Nether dimension access
+allow-nether = true
+
+# Generate structures (villages, strongholds...)
+generate-structures = true
+
+# Custom generator settings (JSON, empty = default)
+generator-settings = ""
+
+# Spawn animals
+spawn-animals = true
+
+# Spawn monsters
+spawn-monsters = true
+
+# Spawn villagers etc
+spawn-npcs = true
+
+# Spawn protection radius in blocks (0 = off)
 spawn-protection = 16
 
-# Max world size (blocks)
+# Max world size in blocks (radius from center)
 max-world-size = 29999984
 
-# View distance (chunks)
+# View distance in chunks (3-32)
 view-distance = 10
 
-# Simulation distance (chunks)
+# Simulation distance in chunks (5-32)
 simulation-distance = 10
 
-# Network compression threshold
+# Network compression threshold (-1 = off, 0 = compress all, 256 default)
 network-compression-threshold = 256
 
-# Max tick time before watchdog kills server (ms, -1 to disable)
+# Max tick time before watchdog crash (ms, -1 = disable watchdog)
 max-tick-time = 60000
 
-# Rate limit (packets per second, 0 = no limit)
+# Packet rate limit (0 = no limit)
 rate-limit = 0
 
-# Sync chunk writes
+# Sync chunk writes (enable for safer saves)
 sync-chunk-writes = true
 
-# Use native transport (epoll/kqueue)
+# Use epoll/kqueue native transport (Linux/macOS)
 use-native-transport = true
 
-# Show server in server list
+# Show the server in the public server list
 enable-status = true
 
-# Enforce whitelist
+# Enforce whitelist after kick
 enforce-whitelist = false
+
+# Whitelist enabled
+white-list = false
 
 # Force gamemode on join
 force-gamemode = false
@@ -80,7 +105,7 @@ force-gamemode = false
 # Prevent proxy connections
 prevent-proxy-connections = false
 
-# Max chained neighbor updates
+# Max chained neighbor updates (performance)
 max-chained-neighbor-updates = 1000000
 
 # OP permission level (1-4)
@@ -92,57 +117,118 @@ function-permission-level = 2
 # Player idle timeout (minutes, 0 = disabled)
 player-idle-timeout = 0
 
-# Whitelist
-white-list = false
-
-# Enforce secure profiles
+# Enforce secure profile (signed chat)
 enforce-secure-profile = true
 
-# Hide online player count
+# Hide online player count in server list ping
 hide-online-players = false
 
-# Announce player achievements
-announce-player-achievements = true
-
-# Resource pack URL (leave empty to disable)
-resource-pack = ""
-
-# Resource pack SHA1 hash
-resource-pack-sha1 = ""
-
-# Require resource pack
-resource-pack-required = false
-
-# Resource pack prompt message
-resource-pack-prompt = ""
-
-# Resource pack timeout (seconds)
-resource-pack-play-timeout = 0
-
-# Enabled data packs
+# Data packs enabled on first world creation
 initial-enabled-packs = "vanilla"
 
-# Disabled data packs
+# Data packs disabled on first world creation
 initial-disabled-packs = ""
 
-# Network settings
+# Resource pack URL (empty = none)
+resource-pack = ""
 
+# Resource pack SHA1 (empty = none)
+resource-pack-sha1 = ""
+
+# Require the resource pack
+resource-pack-required = false
+
+# Resource pack prompt message (empty = none)
+resource-pack-prompt = ""
+
+# Accept player transfers (0 = off)
+accepts-transfers = false
+
+# Broadcast console to ops
+broadcast-console-to-ops = true
+
+# Broadcast RCON console to ops
+broadcast-rcon-to-ops = true
+
+# Bug report link (empty = none)
+bug-report-link = ""
+
+# Chat spam threshold (seconds)
+chat-spam-threshold-seconds = 10
+
+# Command spam threshold (seconds)
+command-spam-threshold-seconds = 10
+
+# Enable code of conduct screen
+enable-code-of-conduct = false
+
+# Enable JMX monitoring
+enable-jmx-monitoring = false
+
+# Enable query protocol
+enable-query = false
+
+# Enable RCON
+enable-rcon = false
+
+# Log player IPs
+log-ips = true
+
+# Pause server when empty (seconds, -1 = disabled)
+pause-when-empty-seconds = 60
+
+# Entity broadcast range percentage (10-1000)
+entity-broadcast-range-percentage = 100
+
+# Region file compression: deflate, lz4
+region-file-compression = "deflate"
+
+# Status heartbeat interval (0 = default)
+status-heartbeat-interval = 0
+
+# Text filtering config (JSON, empty = none)
+text-filtering-config = ""
+
+# Text filtering version (0 = off)
+text-filtering-version = 0
+
+# ============================================================
+# [network] — query & rcon networking
+# ============================================================
 [network]
-# Query protocol (for server list ping)
+# Query protocol port
 query-port = 25565
 
-# RCON (remote console)
+# RCON port
 rcon-port = 25575
+
+# RCON password (empty = disabled even if enable-rcon is true)
 rcon-password = ""
 
-# Management Settings (experimental)
-
+# ============================================================
+# [management] — experimental management server (26.2)
+# ============================================================
 [management]
+# Enable management server
 enabled = false
+
+# Bind host
 host = "localhost"
+
+# Bind port (0 = ephemeral)
 port = 0
+
+# API secret (empty = auto-generated at runtime)
 secret = ""
+
+# TLS enabled
 tls-enabled = true
+
+# TLS keystore path (empty = default)
 tls-keystore = ""
+
+# TLS keystore password
 tls-keystore-password = ""
+
+# Allowed CORS origins
 allowed-origins = ""
