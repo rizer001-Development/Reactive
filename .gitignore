@@ -1,70 +1,65 @@
-# JVM crash related
-core.*
-hs_err_pid*
-
-# Intellij
-/.idea/*
-!/.idea/runConfigurations
-!/.idea/icon.svg
-*.iml
-*.ipr
-*.iws
-out/
-
-# Eclipse
-.classpath
-.project
-.settings/
-
-# netbeans
-nbproject/
-nbactions.xml
-
 # Gradle
-!gradle-wrapper.jar
 .gradle/
 build/
-*/build/
+!gradle/wrapper/gradle-wrapper.jar
 
-# we use maven!
-build.xml
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
 
-# Maven
-log/
-target/
-dependency-reduced-pom.xml
-
-# various other potential build files
-build/
-bin/
-dist/
-manifest.mf
-
-# Mac
-.DS_Store/
+# OS
 .DS_Store
+Thumbs.db
 
-# vim
-.*.sw[a-p]
+# Compiled classes
+*.class
 
-# Linux temp files
-*~
-
-# other stuff
-/run
-
-/purpur-server/build.gradle.kts
-/purpur-server/src/minecraft
-/paper-server
-/purpur-api/build.gradle.kts
-/paper-api
+# Package files
 *.jar
-test-plugin.settings.gradle.kts
+!libs/server-26.2.jar
+!gradle/wrapper/gradle-wrapper.jar
 
-# Reactive - Generated Minecraft source (embedded git repos)
-reactive-server/src/minecraft/java
-reactive-server/src/minecraft/resources
-paper-server
-paper-api
-# Build outputs
-reactive-server/build
+# Logs
+*.log
+logs/
+
+# Server runtime files (generated on first run)
+server.properties
+eula.txt
+crash-reports/
+world/
+world_nether/
+world_the_end/
+banned-ips.json
+banned-players.json
+ops.json
+whitelist.json
+usercache.json
+usernamecache.json
+
+# TOML configs (generated from defaults, user-edited)
+server.toml
+reactive.toml
+gamerules.toml
+ops.toml
+whitelist.toml
+banned-players.toml
+banned-ips.toml
+usercache.toml
+
+# Tools (temp build tools, not needed in repo)
+tools/
+libs/server-26.2-stripped.jar
+libs/server-26.2-patched.jar
+
+# Plugins / Mods
+plugins/
+mods/
+config/
+libraries/
+versions/

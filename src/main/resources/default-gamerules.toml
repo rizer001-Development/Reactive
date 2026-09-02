@@ -1,0 +1,19 @@
+# Reactive Server - Game Rules (per world)
+# Each section is a world dimension (e.g. [world], [world_nether], [world_the_end])
+# Edit values and use /reactive reload to apply changes.
+# For major changes, restart the server.
+
+[world]
+# Example game rules (uncommented values are defaults):
+# doDaylightCycle = true
+# doMobSpawning = true
+# doTileDrops = true
+# doImmediateRespawn = false
+# keepInventory = false
+# mobGriefing = true
+# doFireTick = true
+# announceAdvancements = true
+
+[world_nether]
+
+[world_the_end]

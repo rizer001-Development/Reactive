@@ -1,0 +1,8 @@
+# Reactive Server — Whitelist
+# Change the values below and restart the server or core using /reactive reload
+# Only players listed here can join the server.
+
+# Example:
+# [Steve]
+# uuid = "8667ba71-b85a-4004-af54-457a9734eed7"
+# expiresOn = ""

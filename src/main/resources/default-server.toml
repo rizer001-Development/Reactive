@@ -1,0 +1,148 @@
+# Minecraft Server Configuration
+# Change the values below and restart the server for the changes to take effect.
+
+[server]
+# Server port
+port = 25565
+
+# Server IP (leave empty for all interfaces)
+ip = ""
+
+# Maximum players
+max-players = 20
+
+# Online mode (verify accounts with Mojang)
+online-mode = false
+
+# Message of the day
+motd = "A Reactive Server"
+
+# World name
+level-name = "world"
+
+# World seed (leave empty for random)
+level-seed = ""
+
+# World type (default, flat, largebiomes, amplified)
+level-type = "default"
+
+# Difficulty (peaceful, easy, normal, hard)
+difficulty = "easy"
+
+# Gamemode (survival, creative, adventure, spectator)
+gamemode = "survival"
+
+# Hardcore mode
+hardcore = false
+
+# Allow player vs player
+pvp = true
+
+# Allow flying in survival
+allow-flight = false
+
+# Spawn protection radius (0 to disable)
+spawn-protection = 16
+
+# Max world size (blocks)
+max-world-size = 29999984
+
+# View distance (chunks)
+view-distance = 10
+
+# Simulation distance (chunks)
+simulation-distance = 10
+
+# Network compression threshold
+network-compression-threshold = 256
+
+# Max tick time before watchdog kills server (ms, -1 to disable)
+max-tick-time = 60000
+
+# Rate limit (packets per second, 0 = no limit)
+rate-limit = 0
+
+# Sync chunk writes
+sync-chunk-writes = true
+
+# Use native transport (epoll/kqueue)
+use-native-transport = true
+
+# Show server in server list
+enable-status = true
+
+# Enforce whitelist
+enforce-whitelist = false
+
+# Force gamemode on join
+force-gamemode = false
+
+# Prevent proxy connections
+prevent-proxy-connections = false
+
+# Max chained neighbor updates
+max-chained-neighbor-updates = 1000000
+
+# OP permission level (1-4)
+op-permission-level = 4
+
+# Function permission level (1-4)
+function-permission-level = 2
+
+# Player idle timeout (minutes, 0 = disabled)
+player-idle-timeout = 0
+
+# Whitelist
+white-list = false
+
+# Enforce secure profiles
+enforce-secure-profile = true
+
+# Hide online player count
+hide-online-players = false
+
+# Announce player achievements
+announce-player-achievements = true
+
+# Resource pack URL (leave empty to disable)
+resource-pack = ""
+
+# Resource pack SHA1 hash
+resource-pack-sha1 = ""
+
+# Require resource pack
+resource-pack-required = false
+
+# Resource pack prompt message
+resource-pack-prompt = ""
+
+# Resource pack timeout (seconds)
+resource-pack-play-timeout = 0
+
+# Enabled data packs
+initial-enabled-packs = "vanilla"
+
+# Disabled data packs
+initial-disabled-packs = ""
+
+# Network settings
+
+[network]
+# Query protocol (for server list ping)
+query-port = 25565
+
+# RCON (remote console)
+rcon-port = 25575
+rcon-password = ""
+
+# Management Settings (experimental)
+
+[management]
+enabled = false
+host = "localhost"
+port = 0
+secret = ""
+tls-enabled = true
+tls-keystore = ""
+tls-keystore-password = ""
+allowed-origins = ""

@@ -1,0 +1,9 @@
+# Reactive Server — OPs
+# Change the values below and restart the server or core using /reactive reload
+# Players listed here have operator (OP) status.
+
+# Example:
+# [Steve]
+# uuid = "8667ba71-b85a-4004-af54-457a9734eed7"
+# expiresOn = ""
+

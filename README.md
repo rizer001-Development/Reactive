@@ -1,318 +1,121 @@
-# Reactive
+# Reactive - Vanilla Minecraft Server Core
 
-[![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg?&logo=github)](LICENSE)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/rizer001-Development/Reactive/build.yml?branch=main&event=push&logo=github)](https://github.com/rizer001-Development/Reactive/actions)
-[![GitHub release](https://img.shields.io/github/v/release/rizer001-Development/Reactive?include_prereleases&logo=github)](https://github.com/rizer001-Development/Reactive/releases)
-[![Minecraft](https://img.shields.io/badge/Minecraft-26.2-success?logo=minecraft&logoColor=white)](https://github.com/rizer001-Development/Reactive)
-[![GitHub commits since latest release](https://img.shields.io/github/commits-since/rizer001-Development/Reactive/latest?logo=git)](https://github.com/rizer001-Development/Reactive/commits/main)
-![Development status](https://img.shields.io/badge/status-In_development-yellow)
-
-**Reactive** is a high-performance fork of [Purpur](https://github.com/PurpurMC/Purpur) for Minecraft 26.2, built on top of [Paper](https://github.com/PaperMC/Paper).
-
----
-
-### Organization Docs
-
-[![Guide](https://img.shields.io/badge/Guide-rizer001--Development-00AEFF)](https://github.com/rizer001-Development/.github/blob/main/GUIDE.md) · [![Contributing](https://img.shields.io/badge/Contributing-rizer001--Development-4CAF50)](https://github.com/rizer001-Development/.github/blob/main/CONTRIBUTING.md) · [![Security](https://img.shields.io/badge/Security-rizer001--Development-D9534F)](https://github.com/rizer001-Development/.github/blob/main/SECURITY.md) · [![Code of Conduct](https://img.shields.io/badge/Code%20of%20Conduct-rizer001--Development-5BC0DE)](https://github.com/rizer001-Development/.github/blob/main/CODE_OF_CONDUCT.md)
-
-It inherits all Purpur features and adds its own improvements: extended world height, auto-configuration on first launch, integrated SQLite database, and more.
-
-**Download latest build:** [GitHub Releases](https://github.com/rizer001-Development/Reactive/releases)
-
----
+Custom Minecraft server core based on Mojang's vanilla server code (version **26.2**).
 
 ## What is Reactive?
 
-Reactive is a drop-in replacement for Purpur/Paper servers. Just swap your JAR file and you get:
+Reactive is a **vanilla Minecraft server fork** — we take Mojang's decompiled server code and modify it directly. No complex patch systems, no 10+ minute builds.
 
-- **All Purpur functionality** — 400+ configurable options, WASD controls, mob/item/block/AI configuration, and more
-- **Paper performance** — optimized chunk engine, anti-lag systems, Moonrise patches
-- **Vanilla compatibility** — all Paper/Spigot plugins work without changes
-- **Reactive exclusive features** — unique improvements listed below
+## Features
 
----
+### ✅ Core
+- **Vanilla 26.2 base** — clean decompiled Mojang code
+- **Fast builds** — ~1 minute, no patch system
+- **TOML configs** — human-readable, comments supported, error-resistant
+- **ASM patching** — build-time bytecode modification (per-world game rules)
 
-## Reactive Features
+### ✅ Configuration
+- `server.toml` — replaces `server.properties` (TOML format, sections, comments)
+- `reactive.toml` — Reactive-specific settings
+- `gamerules.toml` — per-world game rules (auto-saved, hot-reloadable)
+- `ops.toml`, `whitelist.toml`, `banned-players.toml`, `banned-ips.toml`, `usercache.toml`
 
-### Extended World Height (up to 2048 blocks)
+### ✅ Commands
+- `/reactive help [page]` — paginated help
+- `/reactive reload` — hot-reload all configs (except server.toml)
+- `/reactive gamerules` — reload game rules from gamerules.toml
 
-Reactive allows increasing the world build height to **2048 blocks** (vs the standard 320). Configured in `config/reactive-config.yml`:
+### ✅ Game Rules
+- **Per-world game rules** — each dimension (overworld, nether, end) has independent rules
+- **Auto-save** — configurable interval (default 30 min)
+- **Hot-reload** — `/reactive reload` applies changes without restart
+- **Shutdown save** — rules saved on server stop
 
-```yaml
-reactive:
-  world-height:
-    enabled: true
-    overworld-min-y: -64
-    overworld-max-y: 2048
-    nether-min-y: 0
-    nether-max-y: 256
-    end-min-y: 0
-    end-max-y: 256
-```
-
-- Implemented by intercepting the `DimensionType` CODEC before the registry freezes
-- Works server-side — **no client mods or resource packs required**
-- All commands (`/tp`, `/setblock`, `/fill`, etc.) use the updated limits
-
-### X/Z Extension to 67 Million Blocks
-
-Horizontal coordinates can be extended to **67,000,000 blocks** along X/Z. Enable it with:
-
-```yaml
-reactive:
-  world-border:
-    enabled: false
-    max-xz: 67000000
-```
-
-### Auto-Configuration on First Launch
-
-On first startup, Reactive automatically creates the `config/` directory and generates all necessary files:
-
-| File | Purpose |
-|------|---------|
-| `config/server.properties` | Core server settings |
-| `config/bukkit.yml` | Bukkit settings |
-| `config/spigot.yml` | Spigot settings |
-| `config/purpur.yml` | Purpur settings |
-| `config/reactive-config.yml` | **Reactive settings** |
-
-**Important:** The `config/` folder is the **single source of truth** for configuration files. If a file is missing at startup, it will be created automatically.
-
-**`reactive-config.yml`** is the central config file for all Reactive-specific features.
-
-### Companion Plugin — UltimateImprovments
-
-[**UltimateImprovments**](https://github.com/rizer001-Development/UltimateImprovments) (UI) is an addon plugin designed specifically for Reactive.
-It provides authentication (Custom Screen dialogs), anti-cheat, player management commands,
-and other server-side features that complement the core server.
-
-Adds the `/ui` command for server management. See the project's
-[README](https://github.com/rizer001-Development/UltimateImprovments) for full documentation.
-
-### EULA Auto-Accept
-
-Reactive automatically accepts the EULA on your behalf on first launch. This is recorded in the database and does not require manually editing `eula.txt`.
-
-### MSPT Server Load Alerts
-
-Reactive can automatically warn players (with the `reactive.alerts` permission) when the server's MSPT (milliseconds per tick) exceeds configured thresholds. This helps server administrators detect performance issues in real time.
-
-Configured in `config/reactive-config.yml`:
-
-```yaml
-reactive:
-  mspt-alert:
-    enabled: true
-    warning-threshold: 40.0
-    critical-threshold: 50.0
-    cooldown-seconds: 10
-    permission: reactive.alerts
-    check-interval-ticks: 20
-```
-
-**Alert levels:**
-| MSPT | Message | Color |
-|------|---------|-------|
-| > 50 ms | `Server Overloaded! MSPT: X ms` | Red |
-| > 40 ms | `High server load! MSPT: X ms` | Gold |
-
-- Players need the `reactive.alerts` permission to see warnings
-- A 10-second cooldown prevents message spam during sustained load
-- The permission and cooldown are fully configurable
-
-### RAM Usage Alerts
-
-Reactive can automatically warn players (with the `reactive.alerts` permission) when the server's JVM memory usage exceeds configured thresholds. This helps administrators detect memory leaks or insufficient RAM allocation.
-
-Configured in `config/reactive-config.yml`:
-
-```yaml
-reactive:
-  ram-alert:
-    enabled: true
-    warning-threshold: 80.0
-    critical-threshold: 90.0
-    cooldown-seconds: 10
-    permission: reactive.alerts
-    check-interval-ticks: 20
-```
-
-**Alert levels:**
-| RAM Usage | Message | Color |
-|-----------|---------|-------|
-| > 90% | `Critical RAM usage! X.XGB / X.XGB (XX%)` | Red |
-| > 80% | `High RAM usage! X.XGB / X.XGB (XX%)` | Gold |
-
-- Shows actual used vs max GB alongside the percentage
-- Players need the `reactive.alerts` permission to see warnings
-- 10-second cooldown prevents spam during sustained high usage
-
-### Entity Tick Limiter
-
-Reactive can automatically detect entity types that consume excessive tick time and **pause their ticking** until the server recovers. This prevents a single laggy entity type (e.g. a mob farm with thousands of zombies) from degrading the entire server experience.
-
-Configured in `config/reactive-config.yml`:
-
-```yaml
-reactive:
-  entity-tick-limiter:
-    enabled: true
-    threshold-mspt: 50.0
-    min-contribution-percent: 20.0
-    cooldown-seconds: 10
-    permission: reactive.alerts
-    check-interval-ticks: 20
-```
-
-**How it works:**
-| Trigger | Action |
-|---------|--------|
-| MSPT > threshold (50ms by default) | Reactive analyzes per-entity-type tick time consumption |
-| Entity type contributes > min-contribution-percent | That entity type's `tick()` is **skipped** until the server recovers |
-| MSPT drops below threshold | All paused entity types resume normal ticking |
-
-- Players with `reactive.alerts` permission receive announcements when entity types are paused
-- A 10-second cooldown prevents message spam during sustained load
-- Once the server recovers, all entity types are automatically unpaused
-- **Completely safe** — entity state is preserved, only `tick()` is temporarily bypassed
-
-### SQLite Database (optional)
-
-Built-in SQLite support for storing server data:
-
-```yaml
-reactive:
-  database:
-    enabled: false
-    type: sqlite
-    sqlite-file: reactive.db
-```
-
-### Branding
-
-- **Server name:** `Reactive Server`
-- **Identifier:** `rizer001:reactive`
-- **Console:** displays `Reactive` instead of `Purpur`
-- **JAR file:** `reactive-server.jar` when built
-
----
-
-## Installation
-
-1. **Download** the latest JAR from [Releases](https://github.com/rizer001-Development/Reactive/releases)
-2. **Replace** your current server JAR with `reactive-server.jar`
-3. **Start** the server. Reactive will create the `config/` folder and all required files automatically
-4. **Configure** `config/reactive-config.yml` to your needs
-
-> **Requirements:** Java 25+ (recommended: Eclipse Adoptium Temurin-25+)
-
----
-
-## Building from Source
-
-### Prerequisites
-- **Java 25+** (Eclipse Adoptium Temurin)
-- **Git**
-
-### Build Instructions
-
-```bash
-# Clone the repository
-git clone https://github.com/rizer001-Development/Reactive.git
-cd Reactive
-
-# Apply all patches
-./gradlew applyAllPatches
-
-# Build the server (produces the runnable JAR)
-./gradlew build
-```
-
-The built JAR will be at `reactive-server/build/libs/reactive-server-<version>.jar`.
-You can also find a paperclip-style executable at `reactive-server/build/libs/reactive-paperclip-<version>.jar`.
-
-### Building in an IDE
-After running `./gradlew applyAllPatches`, the project is ready to import into IntelliJ IDEA or Eclipse.
-
-### Creating a Patch
-
-1. Make changes in `paper-server/` or `reactive-server/src/minecraft/`
-2. Run `./gradlew rebuildPatches`
-3. Patches will appear in `reactive-server/paper-patches/` or `reactive-server/minecraft-patches/`
-
----
-
-## Project Structure
+## Architecture
 
 ```
 Reactive/
-├── reactive-api/          # API layer (extends Paper API)
-│   └── paper-patches/     # API patches
-├── reactive-server/       # Server implementation
-│   ├── paper-patches/     # Paper server patches
-│   │   ├── features/      # Feature patches
-│   │   └── files/         # Individual file patches
-│   ├── minecraft-patches/ # Minecraft code patches
-│   │   ├── features/      # Feature patches (Purpur)
-│   │   └── sources/       # Source file patches
-│   └── src/
-│       ├── main/java/     # Reactive and Purpur code
-│       └── minecraft/     # Modified Minecraft code
-├── paper-api/             # Generated Paper API
-├── paper-server/          # Generated Paper Server
-├── patches/               # Additional patches
-├── build-data/            # Build data
-└── gradle.properties      # Version and build settings
+├── build.gradle.kts                    # Build script
+├── libs/
+│   ├── server-26.2.jar                 # Original Mojang server
+│   └── server-26.2-stripped.jar        # Unsignsed for compilation
+├── src/main/java/
+│   ├── net/minecraft/                  # Decompiled vanilla classes (modified)
+│   │   ├── commands/Commands.java      # Command hook (2 lines vanilla change)
+│   │   ├── server/Eula.java            # EULA removed
+│   │   ├── server/Services.java        # usercache.toml support
+│   │   ├── server/dedicated/Settings.java  # server.toml support
+│   │   └── server/players/
+│   │       ├── StoredUserList.java     # TOML + templates + reload
+│   │       └── CachedUserNameToIdResolver.java
+│   └── org/rizer001/reactive/
+│       ├── command/
+│       │   ├── CommandRegistry.java    # Command hook system
+│       │   └── ReactiveCommands.java   # /reactive commands
+│       ├── config/ReactiveConfig.java  # reactive.toml loader
+│       ├── gamerules/
+│       │   ├── GameRuleTomlStore.java  # gamerules.toml read/write
+│       │   ├── ReactiveGameRuleHooks.java  # ASM hook target
+│       │   └── ReactiveGameRuleManager.java # Lifecycle manager
+│       ├── patch/PatchVanilla.java     # ASM bytecode patcher
+│       └── server/StartMessages.java   # Entry point
+└── src/main/resources/
+    ├── default-*.toml                  # Default config templates
+    └── reactive.mixins.json
 ```
 
----
+## How It Works
 
-## API
+1. **Build time**: `PatchVanilla` patches `ServerLevel.getGameRules()` in the vanilla jar
+2. **Runtime**: Patched method calls `ReactiveGameRuleHooks.getGameRules()` instead of server-wide rules
+3. **Per-world**: Each dimension gets its own `GameRules` instance from `ConcurrentHashMap`
+4. **Persistence**: Rules saved to `gamerules.toml` on interval and shutdown
 
-### Maven Repository
+## Building
 
-```kotlin
-repositories {
-    maven("https://repo.purpurmc.org/snapshots")
-}
+```bash
+# Build (includes ASM patching)
+./gradlew build
+
+# Run server
+./gradlew run
+
+# Or run jar directly
+java -jar build/libs/reactive-26.2-1.0.0.jar nogui
 ```
 
-```kotlin
-dependencies {
-    compileOnly("org.rizer001.reactive:reactive-api:26.2.build.+")
-}
+## Configuration
+
+### First Run
+On first start, Reactive creates all config files from templates:
+- `server.toml` — server settings (edit manually, restart to apply)
+- `reactive.toml` — Reactive settings (edit, `/reactive reload`)
+- `gamerules.toml` — per-world game rules (edit, `/reactive reload`)
+
+### Editing gamerules.toml
+```toml
+["minecraft:overworld"]
+keepInventory = "true"
+doDaylightCycle = "false"
+randomTickSpeed = "3"
+
+["minecraft:the_nether"]
+keepInventory = "false"
 ```
 
-The API includes all interfaces from Paper, Spigot, and Bukkit.
+Then run `/reactive reload` to apply.
 
----
+## Comparison with Paper/Purpur
+
+| Aspect | Paper/Purpur | Reactive |
+|--------|-------------|----------|
+| Build time | 10-20+ min | ~1 min |
+| Code changes | Patch files (diffs) | Direct editing |
+| Patch conflicts | Common on updates | None |
+| Understanding | Hard (500+ patches) | Easy (readable vanilla) |
+| Config format | YAML | TOML (comments, sections) |
 
 ## License
 
-This project is licensed under the **GNU Affero General Public License v3.0** (AGPLv3).
-
-See [PaperMC/Paper](https://github.com/PaperMC/Paper) and [PurpurMC/Purpur](https://github.com/PurpurMC/Purpur) for the license of material used by this project.
-
----
-
-## Acknowledgements
-
-- **[PurpurMC/Purpur](https://github.com/PurpurMC/Purpur)** — project foundation
-- **[PaperMC/Paper](https://github.com/PaperMC/Paper)** — high-performance engine
-- **[PaperMC/Paperweight](https://github.com/PaperMC/paperweight)** — build system
-- **All contributors** to Purpur, Paper, and Reactive
-
----
-
-## Development Status
-
-**Development status: in development.** Reactive is currently in active development. New features, improvements, and bug fixes are being added regularly.
-
-Planned additions include:
-- **More performance optimizations** — further improvements to chunk and entity processing
-- **Enhanced configuration options** — even more fine-grained control over server behavior
-- **Deeper UltimateImprovments integration** — seamless compatibility with the companion plugin
-- **New APIs** — additional hooks for plugin developers
-
-Follow the [Releases page](https://github.com/rizer001-Development/Reactive/releases) to be notified of new builds.
+Mojang's code is subject to Mojang's EULA.
+Reactive is AGPLv3 licensed.

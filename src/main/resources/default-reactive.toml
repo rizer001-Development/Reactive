@@ -1,0 +1,7 @@
+# Reactive Server - Main Settings
+# Change the values below and restart the server or core using /reactive reload
+
+[gamerules]
+# Interval in seconds for auto-saving game rules to gamerules.toml
+# Default: 1800 (30 minutes)
+autosave_interval_seconds = 1800

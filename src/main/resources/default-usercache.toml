@@ -1,0 +1,8 @@
+# Reactive Server — User Cache
+# Change the values below and restart the server or core using /reactive reload
+# This file caches player UUIDs to avoid Mojang API lookups.
+
+# Example:
+# [MrCotik228]
+# uuid = "d841052b-a69c-3744-8ed7-3a63359f93d2"
+# expiresOn = "2026-05-02 13:35:44 +0000"

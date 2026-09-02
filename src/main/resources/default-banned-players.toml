@@ -1,0 +1,11 @@
+# Reactive Server — Banned players
+# Change the values below and restart the server or core using /reactive reload
+# Players listed here are banned from the server.
+
+# Example:
+# [Griefer123]
+# uuid = "d841052b-a69c-3744-8ed7-3a63359f93d2"
+# expiresOn = "2026-05-02 13:35:44 +0000"
+# source = "Admin"
+# reason = "Griefing"
+
