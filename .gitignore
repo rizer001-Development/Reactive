@@ -54,8 +54,6 @@ usercache.toml
 
 # Tools (temp build tools, not needed in repo)
 tools/
-libs/server-26.2-stripped.jar
-libs/server-26.2-patched.jar
 
 # Plugins / Mods
 plugins/

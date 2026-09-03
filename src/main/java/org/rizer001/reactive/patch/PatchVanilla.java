@@ -23,13 +23,27 @@ import java.util.jar.JarOutputStream;
  * every world gets its OWN GameRules object instead of the server-wide one.
  *
  * Usage: PatchVanilla <input.jar> <output.jar>
- */
-public class PatchVanilla {
+ */public class PatchVanilla {
 
     private static final String SERVER_LEVEL_CLASS = "net/minecraft/server/level/ServerLevel.class";
     private static final String HOOK_CLASS = "org/rizer001/reactive/gamerules/ReactiveGameRuleHooks";
     private static final String HOOK_DESC =
             "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/server/level/ServerLevel;)Lnet/minecraft/world/level/gamerules/GameRules;";
+
+    /**
+     * Mojang signs the vanilla server jar. Once any class inside is modified the
+     * signatures become invalid and the JVM refuses to load signed-but-tampered
+     * jars, so they must be dropped when producing our own build artifact.
+     */
+    static boolean isSignatureEntry(String name) {
+        if (name.startsWith("META-INF/")) {
+            String lower = name.toLowerCase();
+            return lower.contains("mojangcs")
+                    || lower.endsWith(".sf") || lower.endsWith(".rsa") || lower.endsWith(".dsa")
+                    || lower.endsWith(".ec");
+        }
+        return false;
+    }
 
     public static void main(String[] args) throws Exception {
         if (args.length < 2) {
@@ -53,11 +67,16 @@ public class PatchVanilla {
                     data.write(buffer, 0, n);
                 }
                 byte[] bytes = data.toByteArray();
-                if (entry.getName().equals(SERVER_LEVEL_CLASS)) {
+                String name = entry.getName();
+                if (isSignatureEntry(name)) {
+                    // Drop Mojang signature files: content was modified, signatures are now invalid.
+                    continue;
+                }
+                if (name.equals(SERVER_LEVEL_CLASS)) {
                     bytes = patchServerLevel(bytes);
                     patched++;
                 }
-                JarEntry outEntry = new JarEntry(entry.getName());
+                JarEntry outEntry = new JarEntry(name);
                 jout.putNextEntry(outEntry);
                 jout.write(bytes);
                 jout.closeEntry();
