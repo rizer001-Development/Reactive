@@ -242,14 +242,21 @@ public abstract class StoredUserList<K, V extends StoredUserEntry<K>> {
     private void loadFromToml(java.io.File tomlFile) {
         try {
             this.map.clear();
+            // IMPORTANT: use toMap(), not entrySet() — toml4j returns nested tables as
+            // Toml objects from entrySet(), not as Map, so instanceof Map would always fail.
             com.moandjiezana.toml.Toml toml = new com.moandjiezana.toml.Toml().read(tomlFile);
             java.util.Map<String, Object> map = toml.toMap();
             for (java.util.Map.Entry<String, Object> entry : map.entrySet()) {
                 if (entry.getValue() instanceof java.util.Map) {
+                    // toml4j 0.7.2 keeps the quotes of quoted table keys (["playername"]), strip them
+                    String name = entry.getKey();
+                    if (name.length() >= 2 && name.startsWith("\"") && name.endsWith("\"")) {
+                        name = name.substring(1, name.length() - 1);
+                    }
                     java.util.Map<String, Object> userData = (java.util.Map<String, Object>) entry.getValue();
                     JsonObject json = new JsonObject();
                     json.addProperty("uuid", userData.getOrDefault("uuid", "").toString());
-                    json.addProperty("name", userData.getOrDefault("name", entry.getKey()).toString());
+                    json.addProperty("name", userData.getOrDefault("name", name).toString());
                     if (userData.containsKey("expiresOn")) json.addProperty("expiresOn", userData.get("expiresOn").toString());
                     if (userData.containsKey("source")) json.addProperty("source", userData.get("source").toString());
                     if (userData.containsKey("reason")) json.addProperty("reason", userData.get("reason").toString());

@@ -38,8 +38,10 @@ public class GameRuleTomlStore {
             return result;
         }
         try {
-            Toml toml = new Toml().read(TOML_PATH.toFile());
-            for (Map.Entry<String, Object> worldEntry : toml.entrySet()) {
+            // IMPORTANT: use toMap(), not entrySet() — toml4j returns nested tables as
+            // Toml objects from entrySet(), not as Map, so instanceof Map would always fail.
+            Map<String, Object> root = new Toml().read(TOML_PATH.toFile()).toMap();
+            for (Map.Entry<String, Object> worldEntry : root.entrySet()) {
                 if (worldEntry.getValue() instanceof Map) {
                     @SuppressWarnings("unchecked")
                     Map<String, Object> rules = (Map<String, Object>) worldEntry.getValue();
@@ -47,13 +49,26 @@ public class GameRuleTomlStore {
                     for (Map.Entry<String, Object> rule : rules.entrySet()) {
                         worldRules.put(rule.getKey(), String.valueOf(rule.getValue()));
                     }
-                    result.put(worldEntry.getKey(), worldRules);
+                    // toml4j 0.7.2 keeps the quotes of quoted table keys (["minecraft:overworld"]),
+                    // so strip them to match level.dimension().identifier().toString()
+                    result.put(stripQuotes(worldEntry.getKey()), worldRules);
                 }
             }
         } catch (Exception e) {
             System.out.println("[Reactive] Failed to load gamerules.toml: " + e.getMessage());
         }
         return result;
+    }
+
+    /**
+     * toml4j 0.7.2 keeps the surrounding quotes of quoted keys (["minecraft:overworld"]),
+     * so strip them when reading.
+     */
+    private static String stripQuotes(String key) {
+        if (key.length() >= 2 && key.startsWith("\"") && key.endsWith("\"")) {
+            return key.substring(1, key.length() - 1);
+        }
+        return key;
     }
 
     /**

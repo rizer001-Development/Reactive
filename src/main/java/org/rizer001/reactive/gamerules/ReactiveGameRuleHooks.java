@@ -28,7 +28,15 @@ public class ReactiveGameRuleHooks {
         return worldGameRules.computeIfAbsent(worldName, k -> {
             // Create new GameRules by copying from server defaults
             GameRules defaults = server.getGameRules();
-            return defaults.copy(level.enabledFeatures());
+            GameRules rules = defaults.copy(level.enabledFeatures());
+            // Apply persisted values from gamerules.toml (if any) so edits survive restarts
+            Map<String, Map<String, String>> tomlData = GameRuleTomlStore.loadAll();
+            Map<String, String> worldRules = tomlData.get(worldName);
+            if (worldRules != null && !worldRules.isEmpty()) {
+                GameRuleTomlStore.applyToGameRules(Map.of(worldName, worldRules), Map.of(worldName, rules));
+                System.out.println("[Reactive] Applied game rules from gamerules.toml for " + worldName);
+            }
+            return rules;
         });
     }
 

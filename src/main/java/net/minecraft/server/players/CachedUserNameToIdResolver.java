@@ -201,13 +201,19 @@ implements UserNameToIdResolver {
                 ensureTomlFileExists();
                 return result;
             }
+            // IMPORTANT: use toMap(), not entrySet() — toml4j returns nested tables as
+            // Toml objects from entrySet(), not as Map, so instanceof Map would always fail.
             com.moandjiezana.toml.Toml toml = new com.moandjiezana.toml.Toml().read(this.file);
             java.util.Map<String, Object> map = toml.toMap();
             DateFormat dateFormat = CachedUserNameToIdResolver.createDateFormat();
             for (java.util.Map.Entry<String, Object> entry : map.entrySet()) {
                 if (entry.getValue() instanceof java.util.Map) {
                     java.util.Map<String, Object> userData = (java.util.Map<String, Object>) entry.getValue();
+                    // toml4j 0.7.2 keeps the quotes of quoted table keys (["playername"]), strip them
                     String name = entry.getKey();
+                    if (name.length() >= 2 && name.startsWith("\"") && name.endsWith("\"")) {
+                        name = name.substring(1, name.length() - 1);
+                    }
                     String uuid = userData.getOrDefault("uuid", "").toString();
                     String expiresOn = userData.getOrDefault("expiresOn", "").toString();
                     if (!uuid.isEmpty()) {
